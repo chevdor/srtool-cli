@@ -1,6 +1,6 @@
-use std::path::PathBuf;
-use std::env;
 use clap::{crate_authors, crate_version, AppSettings, Clap};
+use std::env;
+use std::path::PathBuf;
 
 /// Control the srtool docker container
 #[derive(Clap)]
@@ -10,8 +10,7 @@ pub struct Opts {
 	// /// Whether we output json or something for 'humans'
 	// #[clap(short, long)]
 	// pub json: bool,
-
-    #[clap(subcommand)]
+	#[clap(subcommand)]
 	pub subcmd: SubCommand,
 }
 
@@ -30,6 +29,6 @@ pub struct BuildOpts {
 	#[clap(long, short)]
 	pub package: String,
 
-	#[clap(index=1, default_value = ".")]
+	#[clap(index = 1, default_value = ".")]
 	pub path: PathBuf,
 }
