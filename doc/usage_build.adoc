@@ -1,0 +1,16 @@
+srtool-build 0.1.0
+chevdor <chevdor@gmail.com>
+Build opts
+
+USAGE:
+    srtool build --package <package> [path]
+
+ARGS:
+    <path>    [default: .]
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -p, --package <package>    Provide the runtime such as kusama-runtime, polkadot-runtime, etc...

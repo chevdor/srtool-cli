@@ -24,7 +24,10 @@ fn main() {
 	match opts.subcmd {
 		SubCommand::Build(build_opts) => {
 			println!("Running srtool-cli v{}", crate_version!());
-			let tag = fetch_image_tag();
+			println!("Checking what is the latest available tag...");
+			let tag = fetch_image_tag().expect("Issue fetching the image tag");
+			println!("Found {tag}, we will be using chevdor/srtool:{tag} for the build", tag = tag);
+
 			let path = fs::canonicalize(&build_opts.path).unwrap();
 			let cmd = format!(
 				"docker run --name srtool --rm -e PACKAGE={package} -v {dir}:/build -v {tmpdir}cargo:/cargo-home {image}:{tag}",

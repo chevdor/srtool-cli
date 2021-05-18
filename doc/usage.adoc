@@ -1,0 +1,15 @@
+srtool-cli 0.1.0
+chevdor <chevdor@gmail.com>
+This utility allows invoking the srtool with the right parameters and environment variables. See
+documentations of each command below
+
+USAGE:
+    srtool <SUBCOMMAND>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+SUBCOMMANDS:
+    build    Build opts
+    help     Prints this message or the help of the given subcommand(s)
