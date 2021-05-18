@@ -1,16 +1,39 @@
-srtool-build 0.2.0
+srtool-build 0.3.0
 chevdor <chevdor@gmail.com>
 Build opts
 
 USAGE:
-    srtool build --package <package> [path]
+    srtool build [OPTIONS] --package <package> --runtime-dir <runtime-dir> [path]
 
 ARGS:
-    <path>    [default: .]
+    <path>    By default, srtool will work in the current folder. If your project is located in
+              another location, you can pass it here [default: .]
 
 FLAGS:
     -h, --help       Prints help information
     -V, --version    Prints version information
 
 OPTIONS:
-    -p, --package <package>    Provide the runtime such as kusama-runtime, polkadot-runtime, etc...
+        --build-opts <build-opts>
+            You may pass options to cargo directly here. WARNING, if you pass this value, the
+            automatic build options for Kusama and Polkadot will not be passed and you need to take
+            care of them manually. In general, you should never use this option unless you HAVE to
+            [env: BUILD_OPTS=]
+
+        --default-features <default-features>
+            Passing this is less involved than passing BUILD_OPTS. It allows changing the list of
+            default features while keeping the automatic features detection. This value is useless
+            if BUILD_OPTS is set [env: DEFAULT_FEATURES=]
+
+    -p, --package <package>
+            Provide the runtime such as kusama-runtime, polkadot-runtime, etc... [env:
+            PACKAGE=polkadot-runtime]
+
+        --profile <profile>
+            The default profile to build runtimes is always `release`. You may override the default
+            with this flag [env: PROFILE=] [default: release]
+
+    -r, --runtime-dir <runtime-dir>
+            If your runtime is not in the standard location runtime/<chain_name> you can pass this
+            args to help srtool find it [env: RUNTIME_DIR=runtime/polkadot]
+

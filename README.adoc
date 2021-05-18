@@ -38,4 +38,3 @@ include::doc/usage.adoc[]
 ----
 include::doc/usage_build.adoc[]
 ----
-

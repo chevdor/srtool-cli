@@ -12,6 +12,7 @@ pub fn fetch_image_tag() -> Result<String, ureq::Error> {
 	debug!("Fetching latest version from gitlab");
 	let url = "https://gitlab.com/chevdor/srtool/-/raw/master/RUSTC_VERSION";
 	let tag: String = ureq::get(url).set("Content-Type", "application/txt").call()?.into_string()?;
+	debug!("tag: {}", tag);
 	Ok(tag)
 }
 
@@ -39,16 +40,32 @@ pub fn get_image_tag(cache_validity: Option<u64>) -> Result<String, ureq::Error>
 	}
 
 	let cached_value = fs::read_to_string(&cache_location).map(|s| s.trim_end().to_string());
-	if cached_value.is_ok() && use_cache {
-		info!("using cached value: {:?}", cached_value);
-		return Ok(cached_value.unwrap());
-	} else {
-		let value = fetch_image_tag()?;
-		let mut file = File::create(cache_location)?;
-		file.write_all(value.as_bytes())?;
+
+	match cached_value {
+		Ok(value) if use_cache => {
+			info!("using cached value: {:?}", value);
+			Ok(value)
+		}
+		_ => {
+			let value = fetch_image_tag()?;
+			let mut file = File::create(cache_location)?;
+			file.write_all(value.as_bytes())?;
+
+			Ok(value)
+		}
 	}
 
-	Ok(String::from("nightly-2021-03-15"))
+	// if cached_value.is_ok() && use_cache {
+	// 	info!("using cached value: {:?}", cached_value);
+
+	// 	return Ok(cached_value.unwrap());
+	// } else {
+	// 	let value = fetch_image_tag()?;
+	// 	let mut file = File::create(cache_location)?;
+	// 	file.write_all(value.as_bytes())?;
+	// }
+
+	// Ok(String::from("nightly-2021-03-15"))
 }
 
 pub fn clear_cache() {

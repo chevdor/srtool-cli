@@ -16,8 +16,6 @@ fn handle_exit() {
 
 fn main() {
 	env_logger::init();
-	debug!("this is a debug {}", "message");
-
 	const IMAGE: &str = "chevdor/srtool";
 
 	let opts: Opts = Opts::parse();
@@ -33,7 +31,7 @@ fn main() {
 
 	info!("Running srtool-cli v{}", crate_version!());
 	debug!("Checking what is the latest available tag...");
-	const ONE_HOUR: u64 = 60;
+	const ONE_HOUR: u64 = 60 * 60;
 
 	let tag = get_image_tag(Some(ONE_HOUR)).expect("Issue getting the image tag");
 
@@ -43,12 +41,24 @@ fn main() {
 
 			let path = fs::canonicalize(&build_opts.path).unwrap();
 			format!(
-				"docker run --name srtool --rm -e PACKAGE={package} -v {dir}:/build -v {tmpdir}cargo:/cargo-home {image}:{tag} build",
+				"docker run --name srtool --rm \
+					-e PACKAGE={package} \
+					-e RUNTIME_DIR={runtime_dir} \
+					-e BUILD_OPTS={c_build_opts} \
+					-e DEFAULT_FEATURES={default_features} \
+					-e PROFILE={profile} \
+					-v {dir}:/build \
+					-v {tmpdir}cargo:/cargo-home \
+					{image}:{tag} build",
 				package = build_opts.package,
 				dir = path.display(),
 				tmpdir = env::temp_dir().display(),
 				image = IMAGE,
 				tag = tag,
+				runtime_dir = build_opts.runtime_dir.display(),
+				c_build_opts = build_opts.build_opts.unwrap_or(String::from("")),
+				default_features = build_opts.default_features.unwrap_or(String::from("")),
+				profile = build_opts.profile,
 			)
 		}
 		SubCommand::Info(info_opts) => {
@@ -67,7 +77,7 @@ fn main() {
 		}
 	};
 
-	// println!("command = {:?}", command);
+	debug!("command = {:?}", command);
 
 	if cfg!(target_os = "windows") {
 		Command::new("cmd").args(&["/C", command.as_str()]).output().expect("failed to execute process");
