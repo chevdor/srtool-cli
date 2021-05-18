@@ -1,6 +1,6 @@
 [workspace]
 
 members = [
-    "srtool",
-    "srtool-lib",
+    "cli",
+    "lib",
 ]
