@@ -268,7 +268,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "srtool"
+name = "srtool-cli"
 version = "0.1.0"
 dependencies = [
  "assert_cmd",
