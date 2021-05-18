@@ -1,4 +1,4 @@
-srtool-cli 0.1.0
+srtool-cli 0.2.0
 chevdor <chevdor@gmail.com>
 This utility allows invoking the srtool with the right parameters and environment variables. See
 documentations of each command below
