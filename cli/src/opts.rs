@@ -7,9 +7,14 @@ use std::path::PathBuf;
 #[clap(version = crate_version!(), author = crate_authors!())]
 #[clap(setting = AppSettings::ColoredHelp)]
 pub struct Opts {
-	// /// Whether we output json or something for 'humans'
-	// #[clap(short, long)]
-	// pub json: bool,
+	/// Whether we output json or something for humans
+	#[clap(short, long)]
+	pub json: bool,
+
+	#[clap(short, long)]
+	pub no_cache: bool,
+
+	/// Subcommands are commands passed to `srtool`.
 	#[clap(subcommand)]
 	pub subcmd: SubCommand,
 }
@@ -20,6 +25,12 @@ pub struct Opts {
 pub enum SubCommand {
 	#[clap(version = crate_version!(), author = crate_authors!())]
 	Build(BuildOpts),
+
+	#[clap(version = crate_version!(), author = crate_authors!())]
+	Info(InfoOpts),
+
+	#[clap(version = crate_version!(), author = crate_authors!())]
+	Version(VersionOpts),
 }
 
 /// Build opts
@@ -32,3 +43,14 @@ pub struct BuildOpts {
 	#[clap(index = 1, default_value = ".")]
 	pub path: PathBuf,
 }
+
+/// Info opts
+#[derive(Clap)]
+pub struct InfoOpts {
+	#[clap(index = 1, default_value = ".")]
+	pub path: PathBuf,
+}
+
+/// Version opts
+#[derive(Clap)]
+pub struct VersionOpts;
