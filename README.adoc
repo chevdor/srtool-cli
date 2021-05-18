@@ -1,0 +1,6 @@
+= srtool cli
+
+WARNING: This project is NOT the `srtool` docker image that is actually used to build Substrate Wasm Runtime.
+
+This project is a cli interface to docker to simplify using the `srtool` docker image. With this executable, you no longer need
+to set and maintain a long and complex alias, as currently described in the `srtool` documentation.
