@@ -33,7 +33,7 @@ fn main() {
 
 	info!("Running srtool-cli v{}", crate_version!());
 	debug!("Checking what is the latest available tag...");
-	const ONE_HOUR: u64 = 60;
+	const ONE_HOUR: u64 = 60 * 60;
 
 	let tag = get_image_tag(Some(ONE_HOUR)).expect("Issue getting the image tag");
 

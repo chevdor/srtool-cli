@@ -1,4 +1,4 @@
-srtool-build 0.2.0
+srtool-build 0.3.0
 chevdor <chevdor@gmail.com>
 Build opts
 
