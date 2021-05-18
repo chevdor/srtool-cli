@@ -1,5 +1,7 @@
 = srtool cli
 
+image::resources/srtool-cli_512px.png[align=center, width=256px]
+
 WARNING: This project is NOT the `srtool` docker image that is actually used to build Substrate Wasm Runtime. This utility requires docker to be installed and running and will invoke the `srtool` image to help you build a Substrate runtime.
 
 This project is a cli interface to docker to simplify using the `srtool` docker image. With this executable, you no longer need
