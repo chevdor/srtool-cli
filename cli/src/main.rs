@@ -1,5 +1,6 @@
 mod opts;
 use clap::{crate_version, Clap};
+use log::{debug, info};
 use opts::*;
 use srtool_lib::*;
 use std::process::Command;
@@ -7,49 +8,72 @@ use std::{env, fs};
 
 fn handle_exit() {
 	println!("Killing srtool container, your build was not finished...");
-	let cmd = format!("docker rm -f srtool");
+	let cmd = "docker rm -f srtool".to_string();
 	let _ = Command::new("sh").arg("-c").arg(cmd).spawn().expect("failed to execute cleaning process").wait();
 	println!("Exiting");
 	std::process::exit(0);
 }
 
 fn main() {
+	env_logger::init();
+	debug!("this is a debug {}", "message");
+
+	const IMAGE: &str = "chevdor/srtool";
+
 	let opts: Opts = Opts::parse();
+
+	if opts.no_cache {
+		clear_cache();
+	}
 
 	ctrlc::set_handler(move || {
 		handle_exit();
 	})
 	.expect("Error setting Ctrl-C handler");
 
-	match opts.subcmd {
+	info!("Running srtool-cli v{}", crate_version!());
+	debug!("Checking what is the latest available tag...");
+	const ONE_HOUR: u64 = 60;
+
+	let tag = get_image_tag(Some(ONE_HOUR)).expect("Issue getting the image tag");
+
+	let command = match opts.subcmd {
 		SubCommand::Build(build_opts) => {
-			println!("Running srtool-cli v{}", crate_version!());
-			println!("Checking what is the latest available tag...");
-			let tag = fetch_image_tag().expect("Issue fetching the image tag");
 			println!("Found {tag}, we will be using chevdor/srtool:{tag} for the build", tag = tag);
 
 			let path = fs::canonicalize(&build_opts.path).unwrap();
-			let cmd = format!(
-				"docker run --name srtool --rm -e PACKAGE={package} -v {dir}:/build -v {tmpdir}cargo:/cargo-home {image}:{tag}",
+			format!(
+				"docker run --name srtool --rm -e PACKAGE={package} -v {dir}:/build -v {tmpdir}cargo:/cargo-home {image}:{tag} build",
 				package = build_opts.package,
 				dir = path.display(),
 				tmpdir = env::temp_dir().display(),
-				image = "chevdor/srtool",
+				image = IMAGE,
 				tag = tag,
-			);
-			// println!("cmd = {:?}", cmd);
-
-			if cfg!(target_os = "windows") {
-				Command::new("cmd").args(&["/C", cmd.as_str()]).output().expect("failed to execute process");
-			} else {
-				let _res = Command::new("sh")
-					.arg("-c")
-					.arg(cmd)
-					.spawn()
-					.expect("failed to execute process")
-					.wait_with_output();
-			};
+			)
 		}
+		SubCommand::Info(info_opts) => {
+			let path = fs::canonicalize(&info_opts.path).unwrap();
+
+			format!(
+				"docker run --name srtool --rm  -v {dir}:/build {image}:{tag} info",
+				dir = path.display(),
+				image = IMAGE,
+				tag = tag,
+			)
+		}
+
+		SubCommand::Version(_) => {
+			format!("docker run --name srtool --rm {image}:{tag} version", image = IMAGE, tag = tag,)
+		}
+	};
+
+	// println!("command = {:?}", command);
+
+	if cfg!(target_os = "windows") {
+		Command::new("cmd").args(&["/C", command.as_str()]).output().expect("failed to execute process");
+	} else {
+		let _res =
+			Command::new("sh").arg("-c").arg(command).spawn().expect("failed to execute process").wait_with_output();
 	};
 }
 

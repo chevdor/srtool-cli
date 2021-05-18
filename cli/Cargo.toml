@@ -14,4 +14,6 @@ bench = false
 assert_cmd = "1.0.4"
 clap = "3.0.0-beta.2"
 ctrlc = "3.1.9"
+env_logger = "0.8.3"
+log = "0.4.14"
 srtool-lib = { path = "../lib" }
