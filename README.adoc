@@ -1,6 +1,30 @@
 = srtool cli
 
-WARNING: This project is NOT the `srtool` docker image that is actually used to build Substrate Wasm Runtime.
+WARNING: This project is NOT the `srtool` docker image that is actually used to build Substrate Wasm Runtime. This utility requires docker to be installed and running and will invoke the `srtool` image to help you build a Substrate runtime.
 
 This project is a cli interface to docker to simplify using the `srtool` docker image. With this executable, you no longer need
 to set and maintain a long and complex alias, as currently described in the `srtool` documentation.
+
+== Install
+
+WARNING: If you previously defined `srtool` as an alias, you will first need to remove it first.
+
+=== Clean up
+
+If you used `srtool` in the past, you previously used an `srtool` alias. You can check with:
+
+    type srtool
+
+If you see some output mentioning "srtool is an alias for docker run...", you have an alias set and we need to remove it:
+
+    unalias srtool
+
+NOTE: This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remove this alias there as well.
+
+=== Install
+
+    cargo install --git https://gitlab.com/chevdor/srtool-cli
+
+== Usage
+
+    srtool --help

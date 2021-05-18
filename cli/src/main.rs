@@ -6,14 +6,13 @@ use std::process::Command;
 use std::{env, fs};
 
 fn handle_exit() {
-	println!("Killing srtool container");
+	println!("Killing srtool container, your build was not finished...");
 	let cmd = format!("docker rm -f srtool");
 	let _ = Command::new("sh").arg("-c").arg(cmd).spawn().expect("failed to execute cleaning process").wait();
 	println!("Exiting");
 	std::process::exit(0);
 }
 
-/// Main entry point of the `subwasm` cli
 fn main() {
 	let opts: Opts = Opts::parse();
 

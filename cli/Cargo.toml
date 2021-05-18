@@ -1,8 +1,14 @@
 [package]
-name = "srtool"
+name = "srtool-cli"
 version = "0.1.0"
 authors = ["chevdor <chevdor@gmail.com>"]
 edition = "2018"
+
+[[bin]]
+name = "srtool"
+path = "src/main.rs"
+test = false
+bench = false
 
 [dependencies]
 assert_cmd = "1.0.4"

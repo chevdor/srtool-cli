@@ -15,7 +15,8 @@ pub struct Opts {
 	pub subcmd: SubCommand,
 }
 
-/// You can find all available commands below.
+/// This utility allows invoking the srtool with the right parameters and environment variables.
+/// See documentations of each command below.
 #[derive(Clap)]
 pub enum SubCommand {
 	#[clap(version = crate_version!(), author = crate_authors!())]
