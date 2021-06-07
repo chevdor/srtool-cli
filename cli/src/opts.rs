@@ -37,11 +37,36 @@ pub enum SubCommand {
 #[derive(Clap)]
 pub struct BuildOpts {
 	/// Provide the runtime such as kusama-runtime, polkadot-runtime, etc...
-	#[clap(long, short)]
+	#[clap(long, short, env = "PACKAGE")]
 	pub package: String,
 
+	/// By default, srtool will work in the current folder.
+	/// If your project is located in another location, you can pass it here.
 	#[clap(index = 1, default_value = ".")]
 	pub path: PathBuf,
+
+	/// If your runtime is not in the standard location runtime/<chain_name>
+	/// you can pass this args to help srtool find it.
+	#[clap(short, long, env = "RUNTIME_DIR")]
+	pub runtime_dir: PathBuf,
+
+	/// You may pass options to cargo directly here. WARNING, if you pass
+	/// this value, the automatic build options for Kusama and Polkadot will
+	/// not be passed and you need to take care of them manually.
+	/// In general, you should never use this option unless you HAVE to.
+	#[clap(long, env = "BUILD_OPTS")]
+	pub build_opts: Option<String>,
+
+	/// Passing this is less involved than passing BUILD_OPTS. It allows
+	/// changing the list of default features while keeping the automatic
+	/// features detection. This value is useless if BUILD_OPTS is set.
+	#[clap(long, env = "DEFAULT_FEATURES")]
+	pub default_features: Option<String>,
+
+	/// The default profile to build runtimes is always `release`.
+	/// You may override the default with this flag.
+	#[clap(long, env = "PROFILE", default_value = "release")]
+	pub profile: String,
 }
 
 /// Info opts
