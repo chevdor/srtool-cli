@@ -31,10 +31,10 @@ NOTE: This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to
 
 .help
 ----
-include::doc/usage.adoc[]
+include::./doc/usage.adoc[]
 ----
 
 .build
 ----
-include::doc/usage_build.adoc[]
+include::./doc/usage_build.adoc[]
 ----

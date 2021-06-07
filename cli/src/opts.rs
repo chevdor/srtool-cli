@@ -7,10 +7,18 @@ use std::path::PathBuf;
 #[clap(version = crate_version!(), author = crate_authors!())]
 #[clap(setting = AppSettings::ColoredHelp)]
 pub struct Opts {
+	/// Chose an alternative image. Beware to chose an image that is
+	/// compatible with the original srtool image. Using a random image,
+	/// you take the risk to NOT produce exactly the same deterministic
+	/// result than srtool.
+	#[clap(short, long, default_value = "chevdor/srtool")]
+	pub image: String,
+
 	/// Whether we output json or something for humans
 	#[clap(short, long)]
 	pub json: bool,
 
+	/// Do not use the local cached tag value
 	#[clap(short, long)]
 	pub no_cache: bool,
 
@@ -19,16 +27,21 @@ pub struct Opts {
 	pub subcmd: SubCommand,
 }
 
-/// This utility allows invoking the srtool with the right parameters and environment variables.
-/// See documentations of each command below.
+/// This utility helps starting a container from the srtool Docker image.
+/// It passes the right parameters and environment variables to the container.
+/// Learn more about the srtool image here: https://gitlab.com/chevdor/srtool
 #[derive(Clap)]
 pub enum SubCommand {
+	/// Start a new srtool container to build your runtime
 	#[clap(version = crate_version!(), author = crate_authors!())]
 	Build(BuildOpts),
 
+	/// Provide information about the srtool container and your repo
 	#[clap(version = crate_version!(), author = crate_authors!())]
 	Info(InfoOpts),
 
+	/// Show the versions of the srtool container. Use --version if you want
+	/// the version of this executable.
 	#[clap(version = crate_version!(), author = crate_authors!())]
 	Version(VersionOpts),
 }

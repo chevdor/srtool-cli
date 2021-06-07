@@ -31,7 +31,7 @@ pub fn get_image_tag(cache_validity: Option<u64>) -> Result<String, ureq::Error>
 			let elapsed = last_modif.elapsed().unwrap();
 			if elapsed < duration {
 				use_cache = true;
-				debug!("cache is {:.2?} seconds old", elapsed);
+				debug!("cache is {:.2?} old (< max {:.2?})", elapsed, duration);
 			}
 		}
 	} else {
@@ -50,22 +50,11 @@ pub fn get_image_tag(cache_validity: Option<u64>) -> Result<String, ureq::Error>
 			let value = fetch_image_tag()?;
 			let mut file = File::create(cache_location)?;
 			file.write_all(value.as_bytes())?;
+			info!("using fetched value: {:?}", value);
 
 			Ok(value)
 		}
 	}
-
-	// if cached_value.is_ok() && use_cache {
-	// 	info!("using cached value: {:?}", cached_value);
-
-	// 	return Ok(cached_value.unwrap());
-	// } else {
-	// 	let value = fetch_image_tag()?;
-	// 	let mut file = File::create(cache_location)?;
-	// 	file.write_all(value.as_bytes())?;
-	// }
-
-	// Ok(String::from("nightly-2021-03-15"))
 }
 
 pub fn clear_cache() {

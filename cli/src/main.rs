@@ -16,9 +16,10 @@ fn handle_exit() {
 
 fn main() {
 	env_logger::init();
-	const IMAGE: &str = "chevdor/srtool";
+	info!("Running srtool-cli v{}", crate_version!());
 
 	let opts: Opts = Opts::parse();
+	let image = opts.image;
 
 	if opts.no_cache {
 		clear_cache();
@@ -29,11 +30,11 @@ fn main() {
 	})
 	.expect("Error setting Ctrl-C handler");
 
-	info!("Running srtool-cli v{}", crate_version!());
 	debug!("Checking what is the latest available tag...");
 	const ONE_HOUR: u64 = 60 * 60;
 
 	let tag = get_image_tag(Some(ONE_HOUR)).expect("Issue getting the image tag");
+	info!("Using {}:{}", image, tag);
 
 	let command = match opts.subcmd {
 		SubCommand::Build(build_opts) => {
@@ -53,11 +54,11 @@ fn main() {
 				package = build_opts.package,
 				dir = path.display(),
 				tmpdir = env::temp_dir().display(),
-				image = IMAGE,
+				image = image,
 				tag = tag,
 				runtime_dir = build_opts.runtime_dir.display(),
-				c_build_opts = build_opts.build_opts.unwrap_or(String::from("")),
-				default_features = build_opts.default_features.unwrap_or(String::from("")),
+				c_build_opts = build_opts.build_opts.unwrap_or_else(|| String::from("")),
+				default_features = build_opts.default_features.unwrap_or_else(|| String::from("")),
 				profile = build_opts.profile,
 			)
 		}
@@ -67,13 +68,13 @@ fn main() {
 			format!(
 				"docker run --name srtool --rm  -v {dir}:/build {image}:{tag} info",
 				dir = path.display(),
-				image = IMAGE,
+				image = image,
 				tag = tag,
 			)
 		}
 
 		SubCommand::Version(_) => {
-			format!("docker run --name srtool --rm {image}:{tag} version", image = IMAGE, tag = tag,)
+			format!("docker run --name srtool --rm {image}:{tag} version", image = image, tag = tag,)
 		}
 	};
 
