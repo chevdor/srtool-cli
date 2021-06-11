@@ -3,6 +3,7 @@ use clap::{crate_version, Clap};
 use log::{debug, info};
 use opts::*;
 use srtool_lib::*;
+use std::path::PathBuf;
 use std::process::Command;
 use std::{env, fs};
 
@@ -33,33 +34,57 @@ fn main() {
 	debug!("Checking what is the latest available tag...");
 	const ONE_HOUR: u64 = 60 * 60;
 
+	// let dev_mode = env::var("DEV").is_ok();
+	// debug!("Dev mode: {:?}", dev_mode);
+
+	// let tag = match dev_mode {
+	// 	false => get_image_tag(Some(ONE_HOUR)).expect("Issue getting the image tag"),
+	// 	true => String::from("nightly-2021-02-25-dev"),
+	// };
+
 	let tag = get_image_tag(Some(ONE_HOUR)).expect("Issue getting the image tag");
+
 	info!("Using {}:{}", image, tag);
 
 	let command = match opts.subcmd {
 		SubCommand::Build(build_opts) => {
 			println!("Found {tag}, we will be using chevdor/srtool:{tag} for the build", tag = tag);
 
+			let app = if build_opts.app { " --app" } else { "" };
+			let json = if opts.json || build_opts.json { " --json" } else { "" };
+			let chain = build_opts.package.replace("-runtime", "");
+			let default_runtime_dir = format!("runtime/{}", chain);
+			let runtime_dir = build_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
+
+			debug!("app: '{}'", &app);
+			debug!("json: '{}'", &json);
+			debug!("chain: '{}'", &chain);
+			debug!("default_runtime_dir: '{}'", &default_runtime_dir);
+			debug!("runtime_dir: '{}'", &runtime_dir.display());
+
 			let path = fs::canonicalize(&build_opts.path).unwrap();
+
 			format!(
 				"docker run --name srtool --rm \
-					-e PACKAGE={package} \
-					-e RUNTIME_DIR={runtime_dir} \
-					-e BUILD_OPTS={c_build_opts} \
-					-e DEFAULT_FEATURES={default_features} \
-					-e PROFILE={profile} \
-					-v {dir}:/build \
-					-v {tmpdir}cargo:/cargo-home \
-					{image}:{tag} build",
+				-e PACKAGE={package} \
+				-e RUNTIME_DIR={runtime_dir} \
+				-e BUILD_OPTS={c_build_opts} \
+				-e DEFAULT_FEATURES={default_features} \
+				-e PROFILE={profile} \
+				-v {dir}:/build \
+				-v {tmpdir}cargo:/cargo-home \
+				{image}:{tag} build{app}{json}",
 				package = build_opts.package,
 				dir = path.display(),
 				tmpdir = env::temp_dir().display(),
 				image = image,
 				tag = tag,
-				runtime_dir = build_opts.runtime_dir.display(),
+				runtime_dir = runtime_dir.display(),
 				c_build_opts = build_opts.build_opts.unwrap_or_else(|| String::from("")),
 				default_features = build_opts.default_features.unwrap_or_else(|| String::from("")),
 				profile = build_opts.profile,
+				json = json,
+				app = app,
 			)
 		}
 		SubCommand::Info(info_opts) => {
@@ -83,9 +108,9 @@ fn main() {
 	if cfg!(target_os = "windows") {
 		Command::new("cmd").args(&["/C", command.as_str()]).output().expect("failed to execute process");
 	} else {
-		let _res =
+		let _ =
 			Command::new("sh").arg("-c").arg(command).spawn().expect("failed to execute process").wait_with_output();
-	};
+	}
 }
 
 #[cfg(test)]

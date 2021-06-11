@@ -14,7 +14,7 @@ pub struct Opts {
 	#[clap(short, long, default_value = "chevdor/srtool")]
 	pub image: String,
 
-	/// Whether we output json or something for humans
+	/// This option is DEPRECATED and has no effect
 	#[clap(short, long)]
 	pub json: bool,
 
@@ -53,6 +53,16 @@ pub struct BuildOpts {
 	#[clap(long, short, env = "PACKAGE")]
 	pub package: String,
 
+	/// Enable json output, same than the global --json option
+	#[clap(long, short)]
+	pub json: bool,
+
+	/// Enable the "app" mode which is a mix of json output and
+	/// outputing progress during the build. This flag is recommended for CI.
+	/// the json output will be provided as a single line at the end in compact mode.
+	#[clap(long, short)]
+	pub app: bool,
+
 	/// By default, srtool will work in the current folder.
 	/// If your project is located in another location, you can pass it here.
 	#[clap(index = 1, default_value = ".")]
@@ -61,7 +71,7 @@ pub struct BuildOpts {
 	/// If your runtime is not in the standard location runtime/<chain_name>
 	/// you can pass this args to help srtool find it.
 	#[clap(short, long, env = "RUNTIME_DIR")]
-	pub runtime_dir: PathBuf,
+	pub runtime_dir: Option<PathBuf>,
 
 	/// You may pass options to cargo directly here. WARNING, if you pass
 	/// this value, the automatic build options for Kusama and Polkadot will
