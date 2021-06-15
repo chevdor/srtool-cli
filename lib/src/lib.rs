@@ -1,5 +1,6 @@
 use log::{debug, info};
 use std::{
+	env,
 	fs::{self, File},
 	io::Write,
 	time::{Duration, SystemTime},
@@ -18,6 +19,12 @@ pub fn fetch_image_tag() -> Result<String, ureq::Error> {
 
 /// Get the latest image. it is fetched from cache we have a version that is younger than `cache_validity` in seconds.
 pub fn get_image_tag(cache_validity: Option<u64>) -> Result<String, ureq::Error> {
+	let env_tag = env::var("SRTOOL_TAG");
+	if let Ok(tag) = env_tag {
+		info!("using tag from ENV: {:?}", tag);
+		return Ok(tag);
+	}
+
 	let cache_location = std::env::temp_dir().join(CACHE_FILE);
 	debug!("cache_location = {:?}", cache_location);
 
@@ -43,14 +50,14 @@ pub fn get_image_tag(cache_validity: Option<u64>) -> Result<String, ureq::Error>
 
 	match cached_value {
 		Ok(value) if use_cache => {
-			info!("using cached value: {:?}", value);
+			info!("using tag from cached value: {:?}", value);
 			Ok(value)
 		}
 		_ => {
 			let value = fetch_image_tag()?;
 			let mut file = File::create(cache_location)?;
 			file.write_all(value.as_bytes())?;
-			info!("using fetched value: {:?}", value);
+			info!("using tag from fetched value: {:?}", value);
 
 			Ok(value)
 		}

@@ -34,14 +34,6 @@ fn main() {
 	debug!("Checking what is the latest available tag...");
 	const ONE_HOUR: u64 = 60 * 60;
 
-	// let dev_mode = env::var("DEV").is_ok();
-	// debug!("Dev mode: {:?}", dev_mode);
-
-	// let tag = match dev_mode {
-	// 	false => get_image_tag(Some(ONE_HOUR)).expect("Issue getting the image tag"),
-	// 	true => String::from("nightly-2021-02-25-dev"),
-	// };
-
 	let tag = get_image_tag(Some(ONE_HOUR)).expect("Issue getting the image tag");
 
 	info!("Using {}:{}", image, tag);
