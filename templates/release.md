@@ -29,7 +29,7 @@ tera --help
 ```
 brew tap chevdor/srtool-cli https://github.com/chevdor/srtool-cli
 brew update
-brew install chevdor/srtool-cli/srtool-cli
+brew install chevdor/srtool-cli/srtool
 ```
 
 {{ CHANGELOG }}

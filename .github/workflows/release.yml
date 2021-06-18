@@ -122,8 +122,7 @@ jobs:
           git config --global user.name 'TeraBot'
           git config --global user.email 'chevdor@users.noreply.github.com'
           git commit Formula/srtool.rb -m "build: new homebrew formula for ${{ env.RELEASE_VERSION }}"
-          echo TODO: push disabled for now
-          # git push origin HEAD:master
+          git push origin HEAD:master
 
   create_draft:
     needs: ["linux", "macos"]
