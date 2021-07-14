@@ -47,12 +47,14 @@ fn main() {
 			let chain = build_opts.package.replace("-runtime", "");
 			let default_runtime_dir = format!("runtime/{}", chain);
 			let runtime_dir = build_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
+			let tmpdir = env::temp_dir().join("cargo");
 
 			debug!("app: '{}'", &app);
 			debug!("json: '{}'", &json);
 			debug!("chain: '{}'", &chain);
 			debug!("default_runtime_dir: '{}'", &default_runtime_dir);
 			debug!("runtime_dir: '{}'", &runtime_dir.display());
+			debug!("tmpdir: '{}'", &tmpdir.display());
 
 			let path = fs::canonicalize(&build_opts.path).unwrap();
 
@@ -64,11 +66,11 @@ fn main() {
 				-e DEFAULT_FEATURES={default_features} \
 				-e PROFILE={profile} \
 				-v {dir}:/build \
-				-v {tmpdir}cargo:/cargo-home \
+				-v {tmpdir}:/cargo-home \
 				{image}:{tag} build{app}{json}",
 				package = build_opts.package,
 				dir = path.display(),
-				tmpdir = env::temp_dir().display(),
+				tmpdir = tmpdir.display(),
 				image = image,
 				tag = tag,
 				runtime_dir = runtime_dir.display(),
