@@ -1,3 +1,5 @@
+:toc: right
+
 = srtool cli
 
 image::resources/srtool-cli_512px.png[align=center, width=256px]
@@ -38,3 +40,5 @@ include::./doc/usage.adoc[]
 ----
 include::./doc/usage_build.adoc[]
 ----
+
+include::CONTRIBUTING.adoc[]

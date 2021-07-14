@@ -31,41 +31,53 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
 **help**
 
-    srtool-cli 0.3.0
+    srtool-cli 0.6.0
     chevdor <chevdor@gmail.com>
-    This utility allows invoking the srtool with the right parameters and environment variables. See
-    documentations of each command below
+    This utility helps starting a container from the srtool Docker image. It passes the right parameters
+    and environment variables to the container. Learn more about the srtool image here:
+    https://github.com/paritytech/srtool
 
     USAGE:
-        srtool [FLAGS] <SUBCOMMAND>
+        srtool [FLAGS] [OPTIONS] <SUBCOMMAND>
 
     FLAGS:
         -h, --help        Prints help information
-        -j, --json        Whether we output json or something for humans
-        -n, --no-cache
+        -j, --json        This option is DEPRECATED and has no effect
+        -n, --no-cache    Do not use the local cached tag value
         -V, --version     Prints version information
 
+    OPTIONS:
+        -i, --image <image>    Chose an alternative image. Beware to chose an image that is compatible
+                               with the original srtool image. Using a random image, you take the risk
+                               to NOT produce exactly the same deterministic result than srtool
+                               [default: paritytech/srtool]
+
     SUBCOMMANDS:
-        build      Build opts
+        build      Start a new srtool container to build your runtime
         help       Prints this message or the help of the given subcommand(s)
-        info       Info opts
-        version    Version opts
+        info       Provide information about the srtool container and your repo
+        version    Show the versions of the srtool container. Use --version if you want the version
+                   of this executable
 
 **build**
 
-    srtool-build 0.3.0
+    srtool-build 0.6.0
     chevdor <chevdor@gmail.com>
-    Build opts
+    Start a new srtool container to build your runtime
 
     USAGE:
-        srtool build [OPTIONS] --package <package> --runtime-dir <runtime-dir> [path]
+        srtool build [FLAGS] [OPTIONS] --package <package> [path]
 
     ARGS:
         <path>    By default, srtool will work in the current folder. If your project is located in
                   another location, you can pass it here [default: .]
 
     FLAGS:
+        -a, --app        Enable the "app" mode which is a mix of json output and outputing progress
+                         during the build. This flag is recommended for CI. the json output will be
+                         provided as a single line at the end in compact mode
         -h, --help       Prints help information
+        -j, --json       Enable json output, same than the global --json option
         -V, --version    Prints version information
 
     OPTIONS:
@@ -81,8 +93,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
                 if BUILD_OPTS is set [env: DEFAULT_FEATURES=]
 
         -p, --package <package>
-                Provide the runtime such as kusama-runtime, polkadot-runtime, etc... [env:
-                PACKAGE=polkadot-runtime]
+                Provide the runtime such as kusama-runtime, polkadot-runtime, etc... [env: PACKAGE=]
 
             --profile <profile>
                 The default profile to build runtimes is always `release`. You may override the default
@@ -90,4 +101,34 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
         -r, --runtime-dir <runtime-dir>
                 If your runtime is not in the standard location runtime/<chain_name> you can pass this
-                args to help srtool find it [env: RUNTIME_DIR=runtime/polkadot]
+                args to help srtool find it [env: RUNTIME_DIR=]
+
+## Contributing
+
+If you landed here, you likely want to contribute the project. Let me thank you already.
+There are several ways you can help. Please start with the few notes below.
+
+### Features and issues
+
+Whether you are reporting an issue you ran into or requesting a new feature, please [open an issue here](https://github.com/chevdor/srtool-cli/issues/new).
+
+You know the drill: please try to provide some context information, the version you used, your OS, how to reproduce. That will greatly help solving your issue quicker.
+
+### Documentation
+
+The documentation of this project is mainly done using [AsciiDoc](https://asciidoc.org/). Unfortunately, it takes [litterally ages](https://github.com/github/markup/issues/1095) for Github to support THE feature that makes AsciiDoc shine.
+As a result, for now, this project is generating the markdwown from AsciiDoc. In short that means that you should NOT modify any `.md` file but change the `.adoc` ones and run `just md` to generate all the markdown.
+
+### Tooling
+
+This project is mainly using Rust so you will need to install the Rust compiler. Make sure everything works with the latest **stable** version of Rust.
+
+You will find a `justfile` in the root of the repo. This is to be used with [just](https://github.com/casey/just) so you may want to install that as well. Just type `just` 😁 to discover how it can help you.
+
+Before submitting your code, do a `cargo clippy` stop to make sure everything works fine. Don’t forget to `cargo fmt --all` as well if you want to be friend with the CI. No surprise, the test can be ran using `cargo test`.
+
+You may activate the **logs** for the project using `RUST_LOG=debug` for instance.
+
+### Pull Requests
+
+PRs are welcome. Feel free to open them early before putting too much effort (you may start with a draft). This way you can ping me ([@chevdor](https://github.com/chevdor)) if you want my opinion on what and how you are putting your change together.

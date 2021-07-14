@@ -1,0 +1,34 @@
+
+== Contributing
+
+If you landed here, you likely want to contribute the project. Let me thank you already.
+There are several ways you can help. Please start with the few notes below.
+
+
+=== Features and issues
+
+Whether you are reporting an issue you ran into or requesting a new feature, please https://github.com/chevdor/srtool-cli/issues/new[open an issue here].
+
+You know the drill: please try to provide some context information, the version you used, your OS, how to reproduce. That will greatly help solving your issue quicker.
+
+
+=== Documentation
+
+The documentation of this project is mainly done using https://asciidoc.org/[AsciiDoc]. Unfortunately, it takes https://github.com/github/markup/issues/1095[litterally ages] for Github to support THE feature that makes AsciiDoc shine.
+As a result, for now, this project is generating the markdwown from AsciiDoc. In short that means that you should NOT modify any `.md` file but change the `.adoc` ones and run `just md` to generate all the markdown.
+
+
+=== Tooling
+
+This project is mainly using Rust so you will need to install the Rust compiler. Make sure everything works with the latest **stable** version of Rust.
+
+You will find a `justfile` in the root of the repo. This is to be used with https://github.com/casey/just[just] so you may want to install that as well. Just type `just` 😁 to discover how it can help you.
+
+Before submitting your code, do a `cargo clippy` stop to make sure everything works fine. Don't forget to `cargo fmt --all` as well if you want to be friend with the CI. No surprise, the test can be ran using `cargo test`.
+
+You may activate the **logs** for the project using `RUST_LOG=debug` for instance.
+
+=== Pull Requests
+
+PRs are welcome. Feel free to open them early before putting too much effort (you may start with a draft). This way you can ping me (https://github.com/chevdor[@chevdor]) if you want my opinion on what and how you are putting your change together.
+
