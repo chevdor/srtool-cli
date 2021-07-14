@@ -1,7 +1,7 @@
 VERSION := `toml get cli/Cargo.toml package.version | jq -r`
 
-bump:
-	cargo workspaces version minor --no-individual-tags
+bump level:
+	cargo workspaces version {{level}} --no-individual-tags
 
 usage:
 	cargo run -q -- --help > doc/usage.adoc

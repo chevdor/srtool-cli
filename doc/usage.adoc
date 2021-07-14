@@ -1,19 +1,27 @@
-srtool-cli 0.3.0
+srtool-cli 0.6.0
 chevdor <chevdor@gmail.com>
-This utility allows invoking the srtool with the right parameters and environment variables. See
-documentations of each command below
+This utility helps starting a container from the srtool Docker image. It passes the right parameters
+and environment variables to the container. Learn more about the srtool image here:
+https://github.com/paritytech/srtool
 
 USAGE:
-    srtool [FLAGS] <SUBCOMMAND>
+    srtool [FLAGS] [OPTIONS] <SUBCOMMAND>
 
 FLAGS:
     -h, --help        Prints help information
-    -j, --json        Whether we output json or something for humans
-    -n, --no-cache    
+    -j, --json        This option is DEPRECATED and has no effect
+    -n, --no-cache    Do not use the local cached tag value
     -V, --version     Prints version information
 
+OPTIONS:
+    -i, --image <image>    Chose an alternative image. Beware to chose an image that is compatible
+                           with the original srtool image. Using a random image, you take the risk
+                           to NOT produce exactly the same deterministic result than srtool
+                           [default: paritytech/srtool]
+
 SUBCOMMANDS:
-    build      Build opts
+    build      Start a new srtool container to build your runtime
     help       Prints this message or the help of the given subcommand(s)
-    info       Info opts
-    version    Version opts
+    info       Provide information about the srtool container and your repo
+    version    Show the versions of the srtool container. Use --version if you want the version
+               of this executable

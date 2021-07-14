@@ -1,16 +1,20 @@
-srtool-build 0.3.0
+srtool-build 0.6.0
 chevdor <chevdor@gmail.com>
-Build opts
+Start a new srtool container to build your runtime
 
 USAGE:
-    srtool build [OPTIONS] --package <package> --runtime-dir <runtime-dir> [path]
+    srtool build [FLAGS] [OPTIONS] --package <package> [path]
 
 ARGS:
     <path>    By default, srtool will work in the current folder. If your project is located in
               another location, you can pass it here [default: .]
 
 FLAGS:
+    -a, --app        Enable the "app" mode which is a mix of json output and outputing progress
+                     during the build. This flag is recommended for CI. the json output will be
+                     provided as a single line at the end in compact mode
     -h, --help       Prints help information
+    -j, --json       Enable json output, same than the global --json option
     -V, --version    Prints version information
 
 OPTIONS:
@@ -26,8 +30,7 @@ OPTIONS:
             if BUILD_OPTS is set [env: DEFAULT_FEATURES=]
 
     -p, --package <package>
-            Provide the runtime such as kusama-runtime, polkadot-runtime, etc... [env:
-            PACKAGE=polkadot-runtime]
+            Provide the runtime such as kusama-runtime, polkadot-runtime, etc... [env: PACKAGE=]
 
         --profile <profile>
             The default profile to build runtimes is always `release`. You may override the default
@@ -35,5 +38,5 @@ OPTIONS:
 
     -r, --runtime-dir <runtime-dir>
             If your runtime is not in the standard location runtime/<chain_name> you can pass this
-            args to help srtool find it [env: RUNTIME_DIR=runtime/polkadot]
+            args to help srtool find it [env: RUNTIME_DIR=]
 
