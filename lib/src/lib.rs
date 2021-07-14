@@ -3,6 +3,7 @@ use std::{
 	env,
 	fs::{self, File},
 	io::Write,
+	process::Command,
 	time::{Duration, SystemTime},
 };
 
@@ -70,14 +71,39 @@ pub fn clear_cache() {
 	let _ = fs::remove_file(cache_location);
 }
 
+// docker inspect paritytech/srtool:1.53.0 | jq -r '.[0].RepoDigests[0]'
+pub fn get_image_digest(image: &str, tag: &str) -> Option<String> {
+	let command = format!("docker inspect {image}:{tag}", image = image, tag = tag);
+
+	let output = if cfg!(target_os = "windows") {
+		Command::new("cmd").args(&["/C", command.as_str()]).output()
+	} else {
+		Command::new("sh").arg("-c").arg(command).output()
+	};
+
+	let output_str = String::from_utf8(output.unwrap().stdout).unwrap_or_else(|_| "".into());
+	let json: serde_json::Value = serde_json::from_str(&output_str).unwrap_or_default();
+	let digest_str = json[0]["RepoDigests"][0].as_str().unwrap_or_default();
+	let digest = digest_str.split(':').nth(1);
+	digest.map(String::from)
+}
+
 #[cfg(test)]
 mod tests {
-	use crate::fetch_image_tag;
+	use crate::{fetch_image_tag, get_image_digest};
 
 	#[test]
 	fn it_fetches_the_version() {
 		let tag = fetch_image_tag().unwrap();
 		println!("current tag = {:?}", tag);
 		assert!(tag.len() > 0);
+	}
+
+	#[test]
+	fn it_gets_the_image_digest() {
+		let image = "paritytech/srtool";
+		let tag = fetch_image_tag().unwrap();
+		let result = get_image_digest(image, &tag);
+		assert!(result.is_some());
 	}
 }

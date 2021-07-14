@@ -48,6 +48,7 @@ fn main() {
 			let default_runtime_dir = format!("runtime/{}", chain);
 			let runtime_dir = build_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
 			let tmpdir = env::temp_dir().join("cargo");
+			let digest = get_image_digest(&image, &tag).unwrap_or_default();
 
 			debug!("app: '{}'", &app);
 			debug!("json: '{}'", &json);
@@ -55,6 +56,7 @@ fn main() {
 			debug!("default_runtime_dir: '{}'", &default_runtime_dir);
 			debug!("runtime_dir: '{}'", &runtime_dir.display());
 			debug!("tmpdir: '{}'", &tmpdir.display());
+			debug!("digest: '{}'", &digest);
 
 			let path = fs::canonicalize(&build_opts.path).unwrap();
 
@@ -65,6 +67,7 @@ fn main() {
 				-e BUILD_OPTS={c_build_opts} \
 				-e DEFAULT_FEATURES={default_features} \
 				-e PROFILE={profile} \
+				-e IMAGE={digest} \
 				-v {dir}:/build \
 				-v {tmpdir}:/cargo-home \
 				{image}:{tag} build{app}{json}",
@@ -79,6 +82,7 @@ fn main() {
 				profile = build_opts.profile,
 				json = json,
 				app = app,
+				digest = digest,
 			)
 		}
 		SubCommand::Info(info_opts) => {
