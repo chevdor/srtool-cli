@@ -11,7 +11,7 @@ pub struct Opts {
 	/// compatible with the original srtool image. Using a random image,
 	/// you take the risk to NOT produce exactly the same deterministic
 	/// result than srtool.
-	#[clap(short, long, default_value = "chevdor/srtool")]
+	#[clap(short, long, default_value = "paritytech/srtool")]
 	pub image: String,
 
 	/// This option is DEPRECATED and has no effect
@@ -29,7 +29,7 @@ pub struct Opts {
 
 /// This utility helps starting a container from the srtool Docker image.
 /// It passes the right parameters and environment variables to the container.
-/// Learn more about the srtool image here: https://gitlab.com/chevdor/srtool
+/// Learn more about the srtool image here: https://github.com/paritytech/srtool
 #[derive(Clap)]
 pub enum SubCommand {
 	/// Start a new srtool container to build your runtime

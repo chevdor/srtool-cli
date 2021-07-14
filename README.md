@@ -25,7 +25,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
 ### Install
 
-    cargo install --git https://gitlab.com/chevdor/srtool-cli
+    cargo install --git https://github.com/chevdor/srtool-cli
 
 ## Usage
 

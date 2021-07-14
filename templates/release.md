@@ -21,7 +21,7 @@ cargo install --git https://github.com/chevdor/srtool-cli
 ```
 wget {{ DEBIAN_URL }}
 dpkg -i srtool_linux_amd64_{{ VERSION }}.deb
-tera --help
+srtool --help
 ```
 
 ## MacOS

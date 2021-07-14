@@ -40,7 +40,7 @@ fn main() {
 
 	let command = match opts.subcmd {
 		SubCommand::Build(build_opts) => {
-			println!("Found {tag}, we will be using chevdor/srtool:{tag} for the build", tag = tag);
+			println!("Found {tag}, we will be using {image}:{tag} for the build", tag = tag, image = image);
 
 			let app = if build_opts.app { " --app" } else { "" };
 			let json = if opts.json || build_opts.json { " --json" } else { "" };
