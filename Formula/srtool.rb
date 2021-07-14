@@ -1,9 +1,9 @@
 class Srtool < Formula
   desc "A command line utility to easily use the srtool docker image"
   homepage "https://github.com/chevdor/srtool-cli"
-  url "https://github.com/chevdor/srtool-cli/releases/download/v0.5.0/srtool_macos_v0.5.0.tar.gz"
-  sha256 "b35a02d2e48dce84ec1bb268a2085ac944af85be743a93d8a9d1b67eb768d0b4"
-  version "0.5.0"
+  url "https://github.com/chevdor/srtool-cli/releases/download/v0.6.0/srtool_macos_v0.6.0.tar.gz"
+  sha256 "8574271d5ddd22eca42a53d7d49d3b935c78978411d43cc7bd4c7e95514412c7"
+  version "0.6.0"
 
   def install
     bin.install "srtool"
