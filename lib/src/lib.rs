@@ -11,8 +11,8 @@ const CACHE_FILE: &str = "srtool-tag-latest.txt";
 /// Fetch the latest image tag
 pub fn fetch_image_tag() -> Result<String, ureq::Error> {
 	debug!("Fetching latest version from github");
-	let url = "https://github.com/paritytech/srtool/-/raw/master/RUSTC_VERSION";
-	let tag: String = ureq::get(url).set("Content-Type", "application/txt").call()?.into_string()?;
+	let url = "https://raw.githubusercontent.com/paritytech/srtool/master/RUSTC_VERSION";
+	let tag: String = ureq::get(url).set("Content-Type", "application/txt").call()?.into_string()?.trim().to_string();
 	debug!("tag: {}", tag);
 	Ok(tag)
 }
