@@ -10,6 +10,7 @@ bump level:
 # This will generate the usage instruction
 usage:
 	cargo run -q -- --help > doc/usage.adoc
+	cargo run -q -- pull --help > doc/usage_pull.adoc
 	cargo run -q -- build --help > doc/usage_build.adoc
 	cargo run -q -- version --help > doc/usage_version.adoc
 	cargo run -q -- info --help > doc/usage_info.adoc

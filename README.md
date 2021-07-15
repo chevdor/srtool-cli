@@ -56,6 +56,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
         build      Start a new srtool container to build your runtime
         help       Prints this message or the help of the given subcommand(s)
         info       Provide information about the srtool container and your repo
+        pull       Simply pull the srtool image and do not run anything else
         version    Show the versions of the srtool container. Use --version if you want the version
                    of this executable
 
@@ -83,6 +84,19 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
     ARGS:
         <path>    [default: .]
+
+    FLAGS:
+        -h, --help       Prints help information
+        -V, --version    Prints version information
+
+**pull**
+
+    srtool-pull 0.6.0
+    chevdor <chevdor@gmail.com>
+    Simply pull the srtool image and do not run anything else
+
+    USAGE:
+        srtool pull
 
     FLAGS:
         -h, --help       Prints help information

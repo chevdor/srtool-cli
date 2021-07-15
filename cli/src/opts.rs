@@ -32,6 +32,10 @@ pub struct Opts {
 /// Learn more about the srtool image here: https://github.com/paritytech/srtool
 #[derive(Clap)]
 pub enum SubCommand {
+	/// Simply pull the srtool image and do not run anything else
+	#[clap(version = crate_version!(), author = crate_authors!())]
+	Pull(PullOpts),
+
 	/// Start a new srtool container to build your runtime
 	#[clap(version = crate_version!(), author = crate_authors!())]
 	Build(BuildOpts),
@@ -45,6 +49,10 @@ pub enum SubCommand {
 	#[clap(version = crate_version!(), author = crate_authors!())]
 	Version(VersionOpts),
 }
+
+/// Build opts
+#[derive(Clap)]
+pub struct PullOpts;
 
 /// Build opts
 #[derive(Clap)]

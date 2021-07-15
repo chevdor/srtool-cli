@@ -39,6 +39,11 @@ fn main() {
 	info!("Using {}:{}", image, tag);
 
 	let command = match opts.subcmd {
+		SubCommand::Pull(_) => {
+			println!("Found {tag}, we will be using {image}:{tag} for the build", tag = tag, image = image);
+			format!("docker pull {image}:{tag}", image = image, tag = tag,)
+		}
+
 		SubCommand::Build(build_opts) => {
 			println!("Found {tag}, we will be using {image}:{tag} for the build", tag = tag, image = image);
 

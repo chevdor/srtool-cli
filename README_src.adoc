@@ -46,6 +46,11 @@ include::./doc/usage_version.adoc[]
 include::./doc/usage_info.adoc[]
 ----
 
+.pull
+----
+include::./doc/usage_pull.adoc[]
+----
+
 .build
 ----
 include::./doc/usage_build.adoc[]
