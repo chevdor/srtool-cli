@@ -59,6 +59,35 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
         version    Show the versions of the srtool container. Use --version if you want the version
                    of this executable
 
+**version**
+
+    srtool-version 0.6.0
+    chevdor <chevdor@gmail.com>
+    Show the versions of the srtool container. Use --version if you want the version of this executable
+
+    USAGE:
+        srtool version
+
+    FLAGS:
+        -h, --help       Prints help information
+        -V, --version    Prints version information
+
+**info**
+
+    srtool-info 0.6.0
+    chevdor <chevdor@gmail.com>
+    Provide information about the srtool container and your repo
+
+    USAGE:
+        srtool info [path]
+
+    ARGS:
+        <path>    [default: .]
+
+    FLAGS:
+        -h, --help       Prints help information
+        -V, --version    Prints version information
+
 **build**
 
     srtool-build 0.6.0
@@ -73,12 +102,15 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
                   another location, you can pass it here [default: .]
 
     FLAGS:
-        -a, --app        Enable the "app" mode which is a mix of json output and outputing progress
-                         during the build. This flag is recommended for CI. the json output will be
-                         provided as a single line at the end in compact mode
-        -h, --help       Prints help information
-        -j, --json       Enable json output, same than the global --json option
-        -V, --version    Prints version information
+        -a, --app         Enable the "app" mode which is a mix of json output and outputing progress
+                          during the build. This flag is recommended for CI. the json output will be
+                          provided as a single line at the end in compact mode
+        -h, --help        Prints help information
+        -j, --json        Enable json output, same than the global --json option
+            --no-cache    Passsing this flag allows completely disabling caching. As a result, no cargo-
+                          home will be mounted to the srtool image. There is no known issue with having
+                          the cache ON, this is why it is the default
+        -V, --version     Prints version information
 
     OPTIONS:
             --build-opts <build-opts>

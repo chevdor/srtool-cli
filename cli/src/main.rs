@@ -49,6 +49,11 @@ fn main() {
 			let runtime_dir = build_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
 			let tmpdir = env::temp_dir().join("cargo");
 			let digest = get_image_digest(&image, &tag).unwrap_or_default();
+			let cache_mount = if !build_opts.no_cache {
+				format!("-v {tmpdir}:/cargo-home", tmpdir = tmpdir.display())
+			} else {
+				String::new()
+			};
 
 			debug!("app: '{}'", &app);
 			debug!("json: '{}'", &json);
@@ -57,6 +62,7 @@ fn main() {
 			debug!("runtime_dir: '{}'", &runtime_dir.display());
 			debug!("tmpdir: '{}'", &tmpdir.display());
 			debug!("digest: '{}'", &digest);
+			debug!("no-cache: '{}'", build_opts.no_cache);
 
 			let path = fs::canonicalize(&build_opts.path).unwrap();
 
@@ -69,11 +75,11 @@ fn main() {
 				-e PROFILE={profile} \
 				-e IMAGE={digest} \
 				-v {dir}:/build \
-				-v {tmpdir}:/cargo-home \
+				{cache_mount} \
 				{image}:{tag} build{app}{json}",
 				package = build_opts.package,
 				dir = path.display(),
-				tmpdir = tmpdir.display(),
+				cache_mount = cache_mount,
 				image = image,
 				tag = tag,
 				runtime_dir = runtime_dir.display(),

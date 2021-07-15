@@ -90,6 +90,12 @@ pub struct BuildOpts {
 	/// You may override the default with this flag.
 	#[clap(long, env = "PROFILE", default_value = "release")]
 	pub profile: String,
+
+	/// Passsing this flag allows completely disabling caching.
+	/// As a result, no cargo-home will be mounted to the srtool image.
+	/// There is no known issue with having the cache ON, this is why it is the default.
+	#[clap(long)]
+	pub no_cache: bool,
 }
 
 /// Info opts

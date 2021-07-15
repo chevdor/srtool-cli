@@ -1,0 +1,13 @@
+srtool-info 0.6.0
+chevdor <chevdor@gmail.com>
+Provide information about the srtool container and your repo
+
+USAGE:
+    srtool info [path]
+
+ARGS:
+    <path>    [default: .]
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information

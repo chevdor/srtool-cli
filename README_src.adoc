@@ -36,6 +36,16 @@ NOTE: This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to
 include::./doc/usage.adoc[]
 ----
 
+.version
+----
+include::./doc/usage_version.adoc[]
+----
+
+.info
+----
+include::./doc/usage_info.adoc[]
+----
+
 .build
 ----
 include::./doc/usage_build.adoc[]
