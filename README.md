@@ -80,14 +80,22 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
     Provide information about the srtool container and your repo
 
     USAGE:
-        srtool info [path]
+        srtool info [OPTIONS] --package <package> [path]
 
     ARGS:
-        <path>    [default: .]
+        <path>    By default, srtool will work in the current folder. If your project is located in
+                  another location, you can pass it here [default: .]
 
     FLAGS:
         -h, --help       Prints help information
         -V, --version    Prints version information
+
+    OPTIONS:
+        -p, --package <package>            Provide the runtime such as kusama-runtime, polkadot-runtime,
+                                           etc... [env: PACKAGE=]
+        -r, --runtime-dir <runtime-dir>    If your runtime is not in the standard location
+                                           runtime/<chain_name> you can pass this args to help srtool
+                                           find it [env: RUNTIME_DIR=]
 
 **pull**
 

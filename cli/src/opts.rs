@@ -109,8 +109,19 @@ pub struct BuildOpts {
 /// Info opts
 #[derive(Clap)]
 pub struct InfoOpts {
+	/// By default, srtool will work in the current folder.
+	/// If your project is located in another location, you can pass it here.
 	#[clap(index = 1, default_value = ".")]
 	pub path: PathBuf,
+
+	/// Provide the runtime such as kusama-runtime, polkadot-runtime, etc...
+	#[clap(long, short, env = "PACKAGE")]
+	pub package: String,
+
+	/// If your runtime is not in the standard location runtime/<chain_name>
+	/// you can pass this args to help srtool find it.
+	#[clap(short, long, env = "RUNTIME_DIR")]
+	pub runtime_dir: Option<PathBuf>,
 }
 
 /// Version opts

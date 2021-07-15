@@ -96,12 +96,24 @@ fn main() {
 				digest = digest,
 			)
 		}
+
 		SubCommand::Info(info_opts) => {
 			let path = fs::canonicalize(&info_opts.path).unwrap();
+			let chain = info_opts.package.replace("-runtime", "");
+			let default_runtime_dir = format!("runtime/{}", chain);
+			let runtime_dir = info_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
+
+			debug!("chain: '{}'", &chain);
+			debug!("default_runtime_dir: '{}'", &default_runtime_dir);
+			debug!("runtime_dir: '{}'", &runtime_dir.display());
 
 			format!(
-				"docker run --name srtool --rm  -v {dir}:/build {image}:{tag} info",
+				"docker run --name srtool --rm \
+					-v {dir}:/build \
+					-e RUNTIME_DIR={runtime_dir} \
+					{image}:{tag} info",
 				dir = path.display(),
+				runtime_dir = runtime_dir.display(),
 				image = image,
 				tag = tag,
 			)
