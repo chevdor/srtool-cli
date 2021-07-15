@@ -14,6 +14,7 @@ usage:
 	cargo run -q -- build --help > doc/usage_build.adoc
 	cargo run -q -- version --help > doc/usage_version.adoc
 	cargo run -q -- info --help > doc/usage_info.adoc
+	cargo run -q -- verify --help > doc/usage_verify.adoc
 
 # When comes the time to release, this will set a new tag
 tag:

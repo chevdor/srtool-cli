@@ -24,5 +24,7 @@ SUBCOMMANDS:
     help       Prints this message or the help of the given subcommand(s)
     info       Provide information about the srtool container and your repo
     pull       Simply pull the srtool image and do not run anything else
+    verify     Show the versions of the srtool container. Use --version if you want the version
+               of this executable
     version    Show the versions of the srtool container. Use --version if you want the version
                of this executable

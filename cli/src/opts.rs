@@ -48,6 +48,11 @@ pub enum SubCommand {
 	/// the version of this executable.
 	#[clap(version = crate_version!(), author = crate_authors!())]
 	Version(VersionOpts),
+
+	/// Show the versions of the srtool container. Use --version if you want
+	/// the version of this executable.
+	#[clap(version = crate_version!(), author = crate_authors!())]
+	Verify(VerifyOpts),
 }
 
 /// Build opts
@@ -127,3 +132,12 @@ pub struct InfoOpts {
 /// Version opts
 #[derive(Clap)]
 pub struct VersionOpts;
+
+/// Verify opts
+#[derive(Clap)]
+pub struct VerifyOpts {
+	/// The path of the srtool digest (json) where most of the settings
+	/// will be fetched to reproduce the exact same build.
+	#[clap(index = 1)]
+	pub digest: PathBuf,
+}

@@ -1,0 +1,14 @@
+srtool-verify 0.6.0
+chevdor <chevdor@gmail.com>
+Show the versions of the srtool container. Use --version if you want the version of this executable
+
+USAGE:
+    srtool verify <digest>
+
+ARGS:
+    <digest>    The path of the srtool digest (json) where most of the settings will be fetched
+                to reproduce the exact same build
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information

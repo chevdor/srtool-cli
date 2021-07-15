@@ -122,6 +122,10 @@ fn main() {
 		SubCommand::Version(_) => {
 			format!("docker run --name srtool --rm {image}:{tag} version", image = image, tag = tag,)
 		}
+
+		SubCommand::Verify(_) => {
+			todo!()
+		}
 	};
 
 	debug!("command = {:?}", command);
