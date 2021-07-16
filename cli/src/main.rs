@@ -123,7 +123,8 @@ fn main() {
 			format!("docker run --name srtool --rm {image}:{tag} version", image = image, tag = tag,)
 		}
 
-		SubCommand::Verify(_) => {
+		SubCommand::Verify(verify_opts) => {
+			debug!("Digest from: {:?}", verify_opts.digest);
 			todo!()
 		}
 	};

@@ -1,3 +1,8 @@
+mod digest;
+mod digest_source;
+mod digest_json;
+mod digest_v9;
+
 use log::{debug, info};
 use std::{
 	env,

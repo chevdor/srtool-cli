@@ -51,7 +51,7 @@ pub enum SubCommand {
 
 	/// Show the versions of the srtool container. Use --version if you want
 	/// the version of this executable.
-	#[clap(version = crate_version!(), author = crate_authors!())]
+	#[clap(version = crate_version!(), author = crate_authors!(), alias = "check")]
 	Verify(VerifyOpts),
 }
 
