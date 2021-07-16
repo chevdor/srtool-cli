@@ -100,6 +100,7 @@ mod tests {
 	}
 
 	#[test]
+	#[ignore = "require docker installed + pulling the image"]
 	fn it_gets_the_image_digest() {
 		let image = "paritytech/srtool";
 		let tag = fetch_image_tag().unwrap();
