@@ -2,7 +2,10 @@ mod opts;
 use clap::{crate_version, Clap};
 use log::{debug, info};
 use opts::*;
+use serde_json::json;
 use srtool_lib::*;
+use std::fs::File;
+use std::io::BufReader;
 use std::path::PathBuf;
 use std::process::Command;
 use std::{env, fs};
@@ -125,6 +128,14 @@ fn main() {
 
 		SubCommand::Verify(verify_opts) => {
 			debug!("Digest from: {:?}", verify_opts.digest);
+			let file = File::open(verify_opts.digest).unwrap();
+			let reader = BufReader::new(file);
+			let content: V2 = serde_json::from_reader(reader).unwrap();
+			let digest_json = json!({ "V2": content });
+			// let digest = Digest::from
+			// debug!("digest = {:#?}", digest);
+			// let specs = digest.get_run_specs();
+			// debug!("specs = {:#?}", specs);
 			todo!()
 		}
 	};

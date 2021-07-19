@@ -1,7 +1,17 @@
 mod digest;
-mod digest_source;
 mod digest_json;
-mod digest_v9;
+mod digest_source;
+mod digest_v2;
+mod run_specs;
+mod rustc_version;
+mod samples;
+mod srtool_tag;
+
+pub use digest::*;
+pub use digest_json::*;
+pub use digest_source::*;
+pub use digest_v2::*;
+pub use srtool_tag::*;
 
 use log::{debug, info};
 use std::{

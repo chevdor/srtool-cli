@@ -512,6 +512,8 @@ dependencies = [
  "ctrlc",
  "env_logger",
  "log",
+ "serde",
+ "serde_json",
  "srtool-lib",
 ]
 

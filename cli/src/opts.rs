@@ -49,8 +49,10 @@ pub enum SubCommand {
 	#[clap(version = crate_version!(), author = crate_authors!())]
 	Version(VersionOpts),
 
-	/// Show the versions of the srtool container. Use --version if you want
-	/// the version of this executable.
+	/// Run a new build based on the digest of a previous run in order
+	/// to check/verify the result. Such a check may not use the very latest
+	/// version of the srtool image but use the same version than used in the
+	/// reference run.
 	#[clap(version = crate_version!(), author = crate_authors!(), alias = "check")]
 	Verify(VerifyOpts),
 }

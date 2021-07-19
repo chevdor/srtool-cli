@@ -1,8 +1,8 @@
+use crate::{digest::Digest, digest_source::DigestSource};
 use serde_json::Result;
 use serde_json::Value;
-
-use crate::{digest::Digest, digest_source::DigestSource};
 type Json = Value;
+
 pub struct DigestJson {}
 
 impl DigestSource<Json> for DigestJson {
@@ -15,13 +15,13 @@ impl DigestSource<Json> for DigestJson {
 #[cfg(test)]
 mod test_super {
 	use super::*;
-	use crate::digest_v9;
+	use crate::digest_v2;
 	use serde_json::json;
 
 	#[test]
 	fn test_() {
 		let json = json!({
-			"V9": {
+			"V2": {
 				"context": {
 					"docker": {
 						"image": "paritytech/srtool",
@@ -54,7 +54,7 @@ mod test_super {
 		let digest = DigestJson::load(json).unwrap();
 
 		match digest {
-			Digest::V9(v9) => assert!(v9.source == digest_v9::Source::Git),
+			Digest::V2(v2) => assert!(v2.source == digest_v2::Source::Git),
 		}
 	}
 }
