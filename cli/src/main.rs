@@ -38,13 +38,11 @@ fn main() {
 	const ONE_HOUR: u64 = 60 * 60;
 
 	let tag = get_image_tag(Some(ONE_HOUR)).expect("Issue getting the image tag");
-
 	info!("Using {}:{}", image, tag);
 
-	let command = match opts.subcmd {
+	match opts.subcmd {
 		SubCommand::Pull(_) => {
-			println!("Found {tag}, we will be using {image}:{tag} for the build", tag = tag, image = image);
-			format!("docker pull {image}:{tag}", image = image, tag = tag,)
+			Runner::pull(&image, &tag);
 		}
 
 		SubCommand::Build(build_opts) => {
@@ -57,11 +55,17 @@ fn main() {
 			let runtime_dir = build_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
 			let tmpdir = env::temp_dir().join("cargo");
 			let digest = get_image_digest(&image, &tag).unwrap_or_default();
-			let cache_mount = if !build_opts.no_cache {
+			let package = build_opts.package;
+			let profile = build_opts.profile;
+			let workdir = fs::canonicalize(&build_opts.path).unwrap();
+			let _cache_mount = if !build_opts.no_cache {
 				format!("-v {tmpdir}:/cargo-home", tmpdir = tmpdir.display())
 			} else {
 				String::new()
 			};
+
+			let search_info = RuntimeCrateSearchInfo { workdir: workdir.to_owned(), options: None };
+			let _rtm_crate = RuntimeCrate::search(&search_info);
 
 			debug!("app: '{}'", &app);
 			debug!("json: '{}'", &json);
@@ -72,58 +76,48 @@ fn main() {
 			debug!("digest: '{}'", &digest);
 			debug!("no-cache: '{}'", build_opts.no_cache);
 
-			let path = fs::canonicalize(&build_opts.path).unwrap();
+			let specs = RunSpecs::new(&package, &runtime_dir, &profile, &image, &tag);
+			let opts = srtool_lib::BuildOpts { json: json == "json", app: app == "app", workdir };
+			Runner::build(&specs, &opts);
 
-			format!(
-				"docker run --name srtool --rm \
-				-e PACKAGE={package} \
-				-e RUNTIME_DIR={runtime_dir} \
-				-e BUILD_OPTS={c_build_opts} \
-				-e DEFAULT_FEATURES={default_features} \
-				-e PROFILE={profile} \
-				-e IMAGE={digest} \
-				-v {dir}:/build \
-				{cache_mount} \
-				{image}:{tag} build{app}{json}",
-				package = build_opts.package,
-				dir = path.display(),
-				cache_mount = cache_mount,
-				image = image,
-				tag = tag,
-				runtime_dir = runtime_dir.display(),
-				c_build_opts = build_opts.build_opts.unwrap_or_else(|| String::from("")),
-				default_features = build_opts.default_features.unwrap_or_else(|| String::from("")),
-				profile = build_opts.profile,
-				json = json,
-				app = app,
-				digest = digest,
-			)
+			// format!(
+			// 	"docker run --name srtool --rm \
+			// 	-e PACKAGE={package} \
+			// 	-e RUNTIME_DIR={runtime_dir} \
+			// 	-e BUILD_OPTS={c_build_opts} \
+			// 	-e DEFAULT_FEATURES={default_features} \
+			// 	-e PROFILE={profile} \
+			// 	-e IMAGE={digest} \
+			// 	-v {dir}:/build \
+			// 	{cache_mount} \
+			// 	{image}:{tag} build{app}{json}",
+			// 	package = build_opts.package,
+			// 	dir = path.display(),
+			// 	cache_mount = cache_mount,
+			// 	image = image,
+			// 	tag = tag,
+			// 	runtime_dir = runtime_dir.display(),
+			// 	c_build_opts = build_opts.build_opts.unwrap_or_else(|| String::from("")),
+			// 	default_features = build_opts.default_features.unwrap_or_else(|| String::from("")),
+			// 	profile = build_opts.profile,
+			// 	json = json,
+			// 	app = app,
+			// 	digest = digest,
+			// )
 		}
 
 		SubCommand::Info(info_opts) => {
-			let path = fs::canonicalize(&info_opts.path).unwrap();
+			// let path = fs::canonicalize(&info_opts.path).unwrap();
 			let chain = info_opts.package.replace("-runtime", "");
 			let default_runtime_dir = format!("runtime/{}", chain);
 			let runtime_dir = info_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
 
-			debug!("chain: '{}'", &chain);
-			debug!("default_runtime_dir: '{}'", &default_runtime_dir);
-			debug!("runtime_dir: '{}'", &runtime_dir.display());
-
-			format!(
-				"docker run --name srtool --rm \
-					-v {dir}:/build \
-					-e RUNTIME_DIR={runtime_dir} \
-					{image}:{tag} info",
-				dir = path.display(),
-				runtime_dir = runtime_dir.display(),
-				image = image,
-				tag = tag,
-			)
+			let specs = RunSpecs::new("", &runtime_dir, "release", &image, &tag);
+			Runner::info(&specs, &runtime_dir);
 		}
 
 		SubCommand::Version(_) => {
-			format!("docker run --name srtool --rm {image}:{tag} version", image = image, tag = tag,)
+			Runner::version(&image, &tag);
 		}
 
 		SubCommand::Verify(verify_opts) => {
@@ -132,22 +126,16 @@ fn main() {
 			let reader = BufReader::new(file);
 			let content: V2 = serde_json::from_reader(reader).unwrap();
 			let digest_json = json!({ "V2": content });
-			// let digest = Digest::from
-			// debug!("digest = {:#?}", digest);
-			// let specs = digest.get_run_specs();
-			// debug!("specs = {:#?}", specs);
+			let digest = DigestJson::load(json!(digest_json)).unwrap();
+			debug!("digest = {:#?}", digest);
+			let specs = digest.get_run_specs().unwrap();
+			debug!("specs = {:#?}", specs);
+			let build_opts = srtool_lib::BuildOpts { json: true, app: true, workdir: "/projects/polkadot".into() };
+
+			Runner::build(&specs, &build_opts);
 			todo!()
 		}
 	};
-
-	debug!("command = {:?}", command);
-
-	if cfg!(target_os = "windows") {
-		Command::new("cmd").args(&["/C", command.as_str()]).output().expect("failed to execute process");
-	} else {
-		let _ =
-			Command::new("sh").arg("-c").arg(command).spawn().expect("failed to execute process").wait_with_output();
-	}
 }
 
 #[cfg(test)]

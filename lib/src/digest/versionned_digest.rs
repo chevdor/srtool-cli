@@ -7,21 +7,25 @@
 
 // TODO: The code for the srtool digest needs to be moved under srtool-cargo once published.
 
-use std::str::FromStr;
-
-use crate::{digest_v2::V2, run_specs::RunSpecs};
+use super::{V1, V2};
+use crate::run_specs::RunSpecs;
 use semver::{Version, VersionReq};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum Digest {
+	V1(V1),
 	V2(V2),
 }
 
+/// Use a DigestSource such as DigestJson to load a Digest
 impl Digest {
 	pub fn get_run_specs(&self) -> Result<RunSpecs, String> {
 		match self {
+			// TODO: what we could do for V1 if really needed if to let the user provide the missing information
+			Digest::V1(_v1) => panic!("Older V1 digests do not contain enough information to generate runspecs"),
 			Digest::V2(v2) => Ok(RunSpecs {
 				package: v2.context.package.to_owned(),
 				runtime_dir: v2.context.runtime_dir.to_owned(),
@@ -36,7 +40,7 @@ impl Digest {
 		}
 	}
 
-	pub fn get_version(json: Value) -> Option<Version> {
+	fn get_version(json: Value) -> Option<Version> {
 		let version_v1 = &json["gen"].as_str().unwrap_or_default().split('v').nth(1);
 		let version_v2 = &json["info"]["generator"]["version"].as_str();
 
@@ -78,8 +82,10 @@ impl From<Value> for Digest {
 
 #[cfg(test)]
 mod test_digest {
+	use serde_json::json;
+
 	use super::*;
-	use crate::samples::*;
+	use crate::{samples::*, DigestJson, DigestSource};
 
 	#[test]
 	fn test_version_from_json_v1() {
@@ -103,5 +109,21 @@ mod test_digest {
 	fn test_version_from_json_unknown() {
 		let v4: Value = serde_json::from_str(SAMPLE_V4).unwrap();
 		assert_eq!(Digest::get_version(v4), None);
+	}
+
+	#[test]
+	#[should_panic]
+	fn test_get_run_specs_v1() {
+		let v1: Value = serde_json::from_str(SAMPLE_V1).unwrap();
+		let digest = DigestJson::load(json!({ "V1": v1 })).unwrap();
+		let _rs = digest.get_run_specs();
+	}
+
+	#[test]
+	fn test_get_run_specs_v2() {
+		let v2: Value = serde_json::from_str(SAMPLE_V2).unwrap();
+		let digest = DigestJson::load(json!({ "V2": v2 })).unwrap();
+		let rs = digest.get_run_specs();
+		println!("rs = {:#?}", rs);
 	}
 }

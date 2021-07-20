@@ -120,4 +120,8 @@ pub const SAMPLE_V3: &str = r#"{
 }"#;
 
 #[cfg(test)]
-pub const SAMPLE_V4: &str = r#"{}"#;
+pub const SAMPLE_V4: &str = r#"{
+    "V4": {
+        "version": "1.2.3"
+    }
+}"#;

@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use semver::Version;
 use serde::{Deserialize, Serialize};
 
@@ -29,25 +31,25 @@ pub struct GitInfo {
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Info {
 	/// Information about the tooling used for the build.
-	generator: Generator,
+	pub(crate) generator: Generator,
 
 	/// Whether the build from an Archive or from a Git repo.
-	src: Source,
+	pub(crate) src: Source,
 
 	/// The version of the crate/package to build
-	version: Version,
+	pub(crate) version: Version,
 
 	/// Optionnal Git information if the src was Git
-	git: Option<GitInfo>,
+	pub(crate) git: Option<GitInfo>,
 
 	/// Rust compiler version
-	rustc: String,
+	pub(crate) rustc: String,
 
 	/// Package
-	pkg: String,
+	pub(crate) pkg: String,
 
 	/// Profile. Always 'release'.
-	profile: String,
+	pub(crate) profile: String,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
@@ -62,7 +64,7 @@ pub struct DockerContext {
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Context {
 	pub(crate) docker: DockerContext,
-	pub(crate) runtime_dir: String,
+	pub(crate) runtime_dir: PathBuf,
 	pub(crate) package: String,
 	pub(crate) profile: String,
 }
@@ -75,6 +77,4 @@ pub struct Context {
 pub struct V2 {
 	pub(crate) info: Info,
 	pub(crate) context: Context,
-	#[serde(alias = "src")]
-	pub(crate) source: Source,
 }
