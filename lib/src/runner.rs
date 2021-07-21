@@ -1,11 +1,12 @@
 //! The runner is effectively a wrapper around docker
 
-use crate::{get_image_digest, run_specs::RunSpecs, RuntimeCrate};
+use crate::{get_image_digest, run_specs::RunSpecs, version::SrtoolVersion, RuntimeCrate};
 use log::{debug, info, trace, warn};
+use serde_json::Value;
 use std::{
 	env, fs,
 	path::{Path, PathBuf},
-	process::Command,
+	process::{Command, Stdio},
 };
 
 pub struct BuildOpts {
@@ -18,12 +19,36 @@ pub struct Runner;
 
 impl Runner {
 	/// Pulls the image
-	pub fn pull(image: &str, tag: &str) {
+	pub fn pull(image: &str, tag: &str) -> Result<(), String> {
 		trace!("pull()");
 
 		debug!("We will be pulling {image}:{tag}", tag = tag, image = image);
 		let cmd = format!("docker pull {image}:{tag}", image = image, tag = tag);
-		Runner::run(cmd);
+		Runner::run(cmd).map(|_| ())
+	}
+
+	/// Get version
+	pub fn version(image: &str, tag: &str) -> Result<SrtoolVersion, String> {
+		let cmd = format!("docker run --name srtool --rm {image}:{tag} version", image = image, tag = tag);
+		let version = Runner::run(cmd).unwrap();
+		serde_json::from_value::<SrtoolVersion>(version).map_err(|e| e.to_string())
+	}
+
+	/// Show infos
+	pub fn info(specs: &RunSpecs, workdir: &Path) {
+		debug!("specs: '{:#?}'", &specs);
+
+		let cmd = format!(
+			"docker run --name srtool --rm \
+                -v {dir}:/build \
+                -e RUNTIME_DIR={runtime_dir} \
+                {image}:{tag} info",
+			dir = workdir.display(),
+			runtime_dir = specs.runtime_dir.display(),
+			image = specs.image,
+			tag = specs.tag,
+		);
+		let _info = Runner::run(cmd).unwrap();
 	}
 
 	/// Invoke the build
@@ -92,43 +117,34 @@ impl Runner {
 			app = app,
 			digest = digest,
 		);
-		Runner::run(cmd);
+
+		let _digest = Runner::run(cmd).unwrap();
 	}
 
-	/// Show infos
-	pub fn info(specs: &RunSpecs, workdir: &Path) {
-		// let rtm_crate =
-		// 	RuntimeCrate::search_flattened(&workdir, &None, &None, &Some(specs.runtime_dir.to_owned())).unwrap();
-
-		debug!("specs: '{:#?}'", &specs);
-
-		let cmd = format!(
-			"docker run --name srtool --rm \
-                -v {dir}:/build \
-                -e RUNTIME_DIR={runtime_dir} \
-                {image}:{tag} info",
-			dir = workdir.display(),
-			runtime_dir = specs.runtime_dir.display(),
-			image = specs.image,
-			tag = specs.tag,
-		);
-		Runner::run(cmd);
-	}
-
-	/// Get version
-	pub fn version(image: &str, tag: &str) {
-		let cmd = format!("docker run --name srtool --rm {image}:{tag} version", image = image, tag = tag);
-		Runner::run(cmd);
-	}
-
-	/// Run the docker command that is passed
-	fn run(cmd: String) {
-		if cfg!(target_os = "windows") {
-			Command::new("cmd").args(&["/C", cmd.as_str()]).output().expect("failed to execute process");
+	/// Run the docker command that is passed and retrive its json output
+	fn run(cmd: String) -> Result<Value, String> {
+		let output = if cfg!(target_os = "windows") {
+			Command::new("cmd")
+				.args(&["/C", cmd.as_str()])
+				.stdout(Stdio::piped())
+				.spawn()
+				.expect("failed to execute process")
+				.wait_with_output()
 		} else {
-			let _ =
-				Command::new("sh").arg("-c").arg(cmd).spawn().expect("failed to execute process").wait_with_output();
-		}
+			Command::new("sh")
+				.arg("-c")
+				.arg(cmd)
+				.stdout(Stdio::piped())
+				.spawn()
+				.expect("failed to execute process")
+				.wait_with_output()
+		};
+
+		output
+			.map(|o| o.stdout)
+			.map(|v| String::from_utf8(v).unwrap_or("".into()))
+			.map(|s| serde_json::from_str(&s).unwrap_or(Value::Null))
+			.map_err(|e| e.to_string())
 	}
 }
 
@@ -139,13 +155,13 @@ mod test_runner {
 	#[test]
 	fn test_pull() {
 		let specs = RunSpecs::default();
-		Runner::pull(&specs.image, &specs.tag);
+		let _ = Runner::pull(&specs.image, &specs.tag);
 	}
 
 	#[test]
 	fn test_version() {
 		let specs = RunSpecs::default();
-		Runner::version(&specs.image, &specs.tag);
+		let _ = Runner::version(&specs.image, &specs.tag);
 	}
 
 	#[test]
@@ -163,5 +179,61 @@ mod test_runner {
 		let workdir = PathBuf::from("/projects/polkadot");
 		let opts = BuildOpts { json: true, app: true, workdir };
 		Runner::build(&specs, &opts);
+	}
+
+	#[test]
+	fn test_fake_build_json() {
+		let digest = include_str!("../../data/digest_v2_01.json");
+		let cmd = format!("docker run --rm -it busybox echo '{}'", digest);
+
+		let res = Runner::run(cmd);
+		println!("res = {:?}", res);
+	}
+}
+
+#[cfg(test)]
+mod test_runner_runs {
+	use crate::Runner;
+	use std::include_str;
+
+	#[test]
+	fn test_fake_version_json() {
+		let data = include_str!("../../data/version.json");
+		let cmd = format!("docker run --rm -it busybox echo '{}'", data);
+
+		let res = Runner::run(cmd).unwrap();
+		assert!(res["name"] == "srtool");
+		println!("{}", serde_json::to_string_pretty(&res).unwrap());
+	}
+
+	#[test]
+	fn test_fake_info_json() {
+		let data = include_str!("../../data/info.json");
+		let cmd = format!("docker run --rm -it busybox echo '{}'", data);
+
+		let res = Runner::run(cmd).unwrap();
+		assert!(res["generator"]["name"] == "srtool");
+
+		println!("{}", serde_json::to_string_pretty(&res).unwrap());
+	}
+
+	#[test]
+	fn test_fake_pull_json() {
+		let data = include_str!("../../data/pull.json");
+		let cmd = format!("docker run --rm -it busybox echo '{}'", data);
+
+		let res = Runner::run(cmd).unwrap();
+		assert!(res.is_null());
+	}
+
+	#[test]
+	fn test_fake_build_json() {
+		let digest = include_str!("../../data/digest_v2_01.json");
+		let cmd = format!("docker run --rm -it busybox echo '{}'", digest);
+
+		let res = Runner::run(cmd).unwrap();
+		assert!(res["info"]["generator"]["name"] == "srtool");
+
+		println!("{}", serde_json::to_string_pretty(&res).unwrap());
 	}
 }

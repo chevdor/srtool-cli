@@ -40,8 +40,15 @@ fn main() {
 	info!("Using {}:{}", image, tag);
 
 	match opts.subcmd {
-		SubCommand::Pull(_) => Runner::pull(&image, &tag),
-		SubCommand::Version(_) => Runner::version(&image, &tag),
+		SubCommand::Pull(_) => {
+			let res = Runner::pull(&image, &tag);
+			println!("{}:{} => {:?}", image, tag, res);
+		}
+
+		SubCommand::Version(_) => {
+			let v = Runner::version(&image, &tag);
+			println!("v = {:?}", v);
+		}
 
 		SubCommand::Info(info_opts) => {
 			let workdir = fs::canonicalize(&info_opts.workdir).unwrap();

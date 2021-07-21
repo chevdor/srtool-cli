@@ -1,8 +1,8 @@
+use semver::Version;
+use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
-use semver::Version;
-
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum RustcVersion {
 	Stable(Version),
 	// Beta(String),
@@ -11,7 +11,7 @@ pub enum RustcVersion {
 }
 
 impl FromStr for RustcVersion {
-	type Err = String;
+	type Err = String; XXX
 
 	// TODO: The checks below are very light ... See https://docs.rs/rustc_version/0.2.3/rustc_version/
 	fn from_str(s: &str) -> Result<Self, Self::Err> {

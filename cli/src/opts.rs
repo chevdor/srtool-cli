@@ -60,6 +60,7 @@ pub enum SubCommand {
 /// Build opts
 #[derive(Clap)]
 pub struct PullOpts;
+// TODO: we may want to let the user specify a repo
 
 /// Build opts
 #[derive(Clap)]

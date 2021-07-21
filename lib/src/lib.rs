@@ -6,6 +6,7 @@ mod runtime_crate;
 mod rustc_version;
 mod samples;
 mod srtool_tag;
+mod version;
 
 pub use digest::*;
 pub use run_specs::*;
