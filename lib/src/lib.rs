@@ -99,7 +99,7 @@ pub fn get_image_digest(image: &str, tag: &str) -> Option<String> {
 	let output_str = String::from_utf8(output.unwrap().stdout).unwrap_or_else(|_| "".into());
 	let json: serde_json::Value = serde_json::from_str(&output_str).unwrap_or_default();
 	let digest_str = json[0]["RepoDigests"][0].as_str().unwrap_or_default();
-	let digest = digest_str.split(':').nth(1);
+	let digest = digest_str.split('@').nth(1);
 	digest.map(String::from)
 }
 

@@ -1,4 +1,7 @@
-use std::{fs, path::PathBuf};
+use std::{
+	fs,
+	path::{Path, PathBuf},
+};
 use toml::Value;
 
 use std::error::Error;
@@ -7,15 +10,15 @@ use std::error::Error;
 /// runtime to build.
 #[derive(Debug)]
 pub struct RuntimeCrate {
-	workdir: PathBuf,
-	runtime_dir: PathBuf,
-	package: String,
-	chain: String,
+	pub workdir: PathBuf,
+	pub runtime_dir: PathBuf,
+	pub package: String,
+	pub chain: String,
 }
 
 #[derive(Debug)]
 pub enum RuntimeCrateSearchOption {
-	RuntimeDir(String),
+	RuntimeDir(PathBuf),
 	Package(String),
 	ChainName(String),
 }
@@ -30,6 +33,23 @@ pub struct RuntimeCrateSearchInfo {
 }
 
 impl RuntimeCrate {
+	pub fn search_flattened(
+		workdir: &Path,
+		package: &Option<String>,
+		chain: &Option<String>,
+		runtime_dir: &Option<PathBuf>,
+	) -> Result<RuntimeCrate, Box<dyn Error>> {
+		let options = if let Some(package) = package {
+			Some(RuntimeCrateSearchOption::Package(package.into()))
+		} else if let Some(chain) = chain {
+			Some(RuntimeCrateSearchOption::ChainName(chain.into()))
+		} else {
+			runtime_dir.as_ref().map(|runtime_dir| RuntimeCrateSearchOption::RuntimeDir(runtime_dir.into()))
+		};
+
+		RuntimeCrate::search(&RuntimeCrateSearchInfo { workdir: fs::canonicalize(&workdir).unwrap(), options })
+	}
+
 	/// This function helps find the runtime crate based on *some* information.
 	/// The result will be Ok if and only if the search critera lead to one single
 	/// result. In any other cases, it will return an error.
@@ -76,7 +96,7 @@ impl RuntimeCrate {
 					})
 				}
 			},
-			None => todo!("This feature is not implemented yet, please pass one other search criteria"),
+			None => todo!("This feature is not implemented yet, please pass one search criteria among `chain`, `package` or `runtime_dir`"),
 		}
 	}
 }

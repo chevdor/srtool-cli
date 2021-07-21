@@ -27,14 +27,13 @@ impl Digest {
 			// TODO: what we could do for V1 if really needed if to let the user provide the missing information
 			Digest::V1(_v1) => panic!("Older V1 digests do not contain enough information to generate runspecs"),
 			Digest::V2(v2) => Ok(RunSpecs {
-				package: v2.context.package.to_owned(),
 				runtime_dir: v2.context.runtime_dir.to_owned(),
 				profile: v2.context.profile.to_owned(),
 				image: v2.context.docker.image.to_owned(),
-				image_sha256: String::new(),  // TODO
+				image_sha256: v2.context.docker.digest.to_owned(),
 				cargo_build_opts: Vec::new(), // TODO
 				default_features: Vec::new(), // TODO
-				tag: v2.context.docker.full_tag.to_owned(),
+				tag: v2.get_full_tag(),
 				cache_mount: false, // TODO
 			}),
 		}

@@ -12,15 +12,15 @@ pub enum Source {
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Generator {
-	name: String,
-	version: Version,
+	pub name: String,
+	pub version: Version,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct GitInfo {
-	commit: String,
-	tag: String,
-	branch: String,
+	pub commit: String,
+	pub tag: String,
+	pub branch: String,
 }
 
 //TODO: in V2, in order to NOT break compatibility, some fields are duplicated. That must be reworked. The profile for instance should be in the Context only.
@@ -55,8 +55,8 @@ pub struct Info {
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct DockerContext {
 	pub image: String,
-	#[serde(alias = "tag")]
-	pub full_tag: String,
+	pub tag: String,
+	pub digest: Option<String>,
 }
 
 /// This struct describes all the information required
@@ -77,4 +77,13 @@ pub struct Context {
 pub struct V2 {
 	pub(crate) info: Info,
 	pub(crate) context: Context,
+}
+
+impl V2 {
+	/// The `full_tag` is made of <rustc_version>-<srtool_build_version>.
+	/// While using only <rustc_version> will produce the same artifacts, we have no insurance
+	/// that another version of the srtool build provides the same output.
+	pub fn get_full_tag(&self) -> String {
+		format!("{}-{}", self.context.docker.tag.to_owned(), self.info.generator.version)
+	}
 }

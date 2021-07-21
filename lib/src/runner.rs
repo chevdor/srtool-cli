@@ -1,7 +1,7 @@
 //! The runner is effectively a wrapper around docker
 
-use crate::{get_image_digest, run_specs::RunSpecs};
-use log::debug;
+use crate::{get_image_digest, run_specs::RunSpecs, RuntimeCrate};
+use log::{debug, info, trace, warn};
 use std::{
 	env, fs,
 	path::{Path, PathBuf},
@@ -19,18 +19,25 @@ pub struct Runner;
 impl Runner {
 	/// Pulls the image
 	pub fn pull(image: &str, tag: &str) {
-		debug!("Found {tag}, we will be using {image}:{tag} for the build", tag = tag, image = image);
+		trace!("pull()");
+
+		debug!("We will be pulling {image}:{tag}", tag = tag, image = image);
 		let cmd = format!("docker pull {image}:{tag}", image = image, tag = tag);
 		Runner::run(cmd);
 	}
 
 	/// Invoke the build
 	pub fn build(specs: &RunSpecs, opts: &BuildOpts) {
-		println!("Found {tag}, we will be using {image}:{tag} for the build", tag = specs.tag, image = specs.image);
+		trace!("build()");
+		let workdir = fs::canonicalize(&opts.workdir).unwrap();
+		debug!("Workdir: {:?}", &workdir);
+		println!("We will be using {image}:{tag} for the build", tag = specs.tag, image = specs.image);
+		let rtm_crate =
+			RuntimeCrate::search_flattened(&workdir, &None, &None, &Some(specs.runtime_dir.to_owned())).unwrap();
 
 		let app = if opts.app { " --app" } else { "" };
 		let json = if opts.json { " --json" } else { "" };
-		let chain = specs.package.replace("-runtime", "");
+		let chain = rtm_crate.package.replace("-runtime", "");
 		let default_runtime_dir = format!("runtime/{}", chain);
 		let runtime_dir = specs.runtime_dir.to_owned();
 		let tmpdir = env::temp_dir().join("cargo");
@@ -48,9 +55,18 @@ impl Runner {
 		debug!("runtime_dir: '{}'", &runtime_dir.display());
 		debug!("tmpdir: '{}'", &tmpdir.display());
 		debug!("digest: '{}'", &digest);
-		debug!("cache-mount: '{}'", specs.cache_mount);
 
-		let path = fs::canonicalize(&opts.workdir).unwrap();
+		if let Some(sha256) = &specs.image_sha256 {
+			if sha256 == &digest {
+				info!("Docker image digest matches: {}", &digest);
+			} else {
+				warn!("Docker image digests DO NOT match:");
+				warn!(" - expected: {} ", &sha256);
+				warn!(" - found   : {} ", &digest);
+			}
+		}
+
+		debug!("cache-mount: '{}'", specs.cache_mount);
 
 		let cmd = format!(
 			"docker run --name srtool --rm \
@@ -63,8 +79,8 @@ impl Runner {
 				-v {dir}:/build \
 				{cache_mount} \
 				{image}:{tag} build{app}{json}",
-			package = specs.package,
-			dir = path.display(),
+			package = rtm_crate.package,
+			dir = workdir.display(),
 			cache_mount = cache_mount,
 			image = specs.image,
 			tag = specs.tag,
@@ -81,12 +97,10 @@ impl Runner {
 
 	/// Show infos
 	pub fn info(specs: &RunSpecs, workdir: &Path) {
-		// let path = fs::canonicalize(&workdir).unwrap();
-		let chain = specs.package.replace("-runtime", "");
-		// let default_runtime_dir = format!("runtime/{}", chain);
+		// let rtm_crate =
+		// 	RuntimeCrate::search_flattened(&workdir, &None, &None, &Some(specs.runtime_dir.to_owned())).unwrap();
 
 		debug!("specs: '{:#?}'", &specs);
-		debug!("chain: '{}'", &chain);
 
 		let cmd = format!(
 			"docker run --name srtool --rm \
