@@ -7,10 +7,10 @@ use std::path::PathBuf;
 #[clap(version = crate_version!(), author = crate_authors!())]
 #[clap(setting = AppSettings::ColoredHelp)]
 pub struct Opts {
-	/// Chose an alternative image. Beware to chose an image that is
+	/// Choose an alternative image. Beware to choose an image that is
 	/// compatible with the original srtool image. Using a random image,
 	/// you take the risk to NOT produce exactly the same deterministic
-	/// result than srtool.
+	/// result as srtool.
 	#[clap(short, long, default_value = "paritytech/srtool")]
 	pub image: String,
 
@@ -66,7 +66,7 @@ pub struct BuildOpts {
 	pub json: bool,
 
 	/// Enable the "app" mode which is a mix of json output and
-	/// outputing progress during the build. This flag is recommended for CI.
+	/// outputting progress during the build. This flag is recommended for CI.
 	/// the json output will be provided as a single line at the end in compact mode.
 	#[clap(long, short)]
 	pub app: bool,
@@ -99,7 +99,7 @@ pub struct BuildOpts {
 	#[clap(long, env = "PROFILE", default_value = "release")]
 	pub profile: String,
 
-	/// Passsing this flag allows completely disabling caching.
+	/// Passing this flag allows completely disabling caching.
 	/// As a result, no cargo-home will be mounted to the srtool image.
 	/// There is no known issue with having the cache ON, this is why it is the default.
 	#[clap(long)]
