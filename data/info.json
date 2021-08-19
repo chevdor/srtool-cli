@@ -1,0 +1,16 @@
+{
+  "generator": {
+    "name": "srtool",
+    "version": "0.9.15"
+  },
+  "src": "git",
+  "version": "0.9.8",
+  "git": {
+    "commit": "3a10ee63c0b5703a1c802db3438ab7e01344a8ce",
+    "tag": "v0.9.8",
+    "branch": "heads/v0.9.8"
+  },
+  "rustc": "rustc 1.53.0 (53cb7b09b 2021-06-17)",
+  "pkg": "polkadot-runtime",
+  "profile": "release"
+}

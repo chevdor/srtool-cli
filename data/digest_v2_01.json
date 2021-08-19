@@ -1,0 +1,88 @@
+{
+	"info": {
+	  "generator": {
+		"name": "srtool",
+		"version": "0.9.15"
+	  },
+	  "src": "git",
+	  "version": "0.9.7",
+	  "git": {
+		"commit": "5d35bac7408a4cb12a578764217d06f3920b36aa",
+		"tag": "v0.9.7-rc3",
+		"branch": "heads/v0.9.7-rc3"
+	  },
+	  "rustc": "rustc 1.53.0 (53cb7b09b 2021-06-17)",
+	  "pkg": "polkadot-runtime",
+	  "profile": "release"
+	},
+	"context": {
+	  "package": "polkadot-runtime",
+	  "runtime_dir": "runtime/polkadot",
+	  "docker": {
+		"image": "chevdor/srtool",
+		"tag": "1.53.0",
+		"digest":  "sha256:31a302da3198ac5d9fe0beb5cb4b456552e8745544172dffa244c439750c0133"
+	  },
+	  "profile": "release"
+	},
+	"runtimes": {
+	  "compact": {
+		"tmsp": "2021-06-29T16:12:24Z",
+		"size": "2093380",
+		"prop": "0x424ac5063ce844b878cd418e7d4c0e5518a6323ec0c54f744b1fb44a2ab24dcd",
+		"blake2_256": "0xc5daf28ebf7f23c8de92a99a6c15b84abeaf12d226542e7504febaf0d1484e05",
+		"ipfs": "QmeBgekBhZHNCkrayDgQaLXfAoLibS5Eq2fyEv4rzbttTo",
+		"sha256": "0x5f31cd25a9de645f278f18b008f38edad5b3253c1b94dc71a12da48c27dd1581",
+		"wasm": "runtime/polkadot/target/srtool/release/wbuild/polkadot-runtime/polkadot_runtime.compact.wasm",
+		"subwasm": {
+		  "size": 2093380,
+		  "compression": {
+			"size_compressed": 2093380,
+			"size_decompressed": 2093380,
+			"compressed": false
+		  },
+		  "reserved_meta": [
+			109,
+			101,
+			116,
+			97
+		  ],
+		  "reserved_meta_valid": true,
+		  "metadata_version": 13,
+		  "core_version": "polkadot-9070 (parity-polkadot-0.tx7.au0)",
+		  "proposal_hash": "0x424ac5063ce844b878cd418e7d4c0e5518a6323ec0c54f744b1fb44a2ab24dcd",
+		  "ipfs_hash": "QmeBgekBhZHNCkrayDgQaLXfAoLibS5Eq2fyEv4rzbttTo",
+		  "blake2_256": "0xc5daf28ebf7f23c8de92a99a6c15b84abeaf12d226542e7504febaf0d1484e05"
+		}
+	  },
+	  "compressed": {
+		"tmsp": "2021-06-23T20:22:41Z",
+		"size": "613213",
+		"prop": "0x73470f4dcc83d491eac816248ac0c91557087f82d123db2c1a5ee098977b0d41",
+		"blake2_256": "0xb8708536646e506c95716bbbaa0a51edbaaf19070c8ba401ef4c0002b308224b",
+		"ipfs": "QmSX3Kho3TWrZUmywLiyWDwDgbuK9uvXixjuFjFREiaUGg",
+		"sha256": "0x9b30d5a053ce48f0ac5a3909a72fe9881a43c21d22f1462bb54f0de6e6e19288",
+		"wasm": "runtime/polkadot/target/srtool/release/wbuild/polkadot-runtime/polkadot_runtime.compact.compressed.wasm",
+		"subwasm": {
+		  "size": 2087945,
+		  "compression": {
+			"size_compressed": 613213,
+			"size_decompressed": 2087945,
+			"compressed": true
+		  },
+		  "reserved_meta": [
+			109,
+			101,
+			116,
+			97
+		  ],
+		  "reserved_meta_valid": true,
+		  "metadata_version": 13,
+		  "core_version": "polkadot-9051 (parity-polkadot-0.tx7.au0)",
+		  "proposal_hash": "0x73470f4dcc83d491eac816248ac0c91557087f82d123db2c1a5ee098977b0d41",
+		  "ipfs_hash": "QmSX3Kho3TWrZUmywLiyWDwDgbuK9uvXixjuFjFREiaUGg",
+		  "blake2_256": "0xb8708536646e506c95716bbbaa0a51edbaaf19070c8ba401ef4c0002b308224b"
+		}
+	  }
+	}
+  }

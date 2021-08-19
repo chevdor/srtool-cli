@@ -56,4 +56,9 @@ include::./doc/usage_pull.adoc[]
 include::./doc/usage_build.adoc[]
 ----
 
+.verify
+----
+include::./doc/usage_verify.adoc[]
+----
+
 include::CONTRIBUTING.adoc[]

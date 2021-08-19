@@ -57,6 +57,8 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
         help       Prints this message or the help of the given subcommand(s)
         info       Provide information about the srtool container and your repo
         pull       Simply pull the srtool image and do not run anything else
+        verify     Show the versions of the srtool container. Use --version if you want the version
+                   of this executable
         version    Show the versions of the srtool container. Use --version if you want the version
                    of this executable
 
@@ -156,6 +158,23 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
         -r, --runtime-dir <runtime-dir>
                 If your runtime is not in the standard location runtime/<chain_name> you can pass this
                 args to help srtool find it [env: RUNTIME_DIR=]
+
+**verify**
+
+    srtool-verify 0.6.0
+    chevdor <chevdor@gmail.com>
+    Show the versions of the srtool container. Use --version if you want the version of this executable
+
+    USAGE:
+        srtool verify <digest>
+
+    ARGS:
+        <digest>    The path of the srtool digest (json) where most of the settings will be fetched
+                    to reproduce the exact same build
+
+    FLAGS:
+        -h, --help       Prints help information
+        -V, --version    Prints version information
 
 ## Contributing
 

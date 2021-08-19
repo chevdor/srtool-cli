@@ -1,3 +1,19 @@
+mod digest;
+
+mod run_specs;
+mod runner;
+mod runtime_crate;
+mod rustc_version;
+mod samples;
+mod srtool_tag;
+mod version;
+
+pub use digest::*;
+pub use run_specs::*;
+pub use runner::*;
+pub use runtime_crate::*;
+pub use srtool_tag::*;
+
 use log::{debug, info};
 use std::{
 	env,
@@ -84,7 +100,7 @@ pub fn get_image_digest(image: &str, tag: &str) -> Option<String> {
 	let output_str = String::from_utf8(output.unwrap().stdout).unwrap_or_else(|_| "".into());
 	let json: serde_json::Value = serde_json::from_str(&output_str).unwrap_or_default();
 	let digest_str = json[0]["RepoDigests"][0].as_str().unwrap_or_default();
-	let digest = digest_str.split(':').nth(1);
+	let digest = digest_str.split('@').nth(1);
 	digest.map(String::from)
 }
 
@@ -96,7 +112,7 @@ mod tests {
 	fn it_fetches_the_version() {
 		let tag = fetch_image_tag().unwrap();
 		println!("current tag = {:?}", tag);
-		assert!(tag.len() > 0);
+		assert!(!tag.is_empty());
 	}
 
 	#[test]
