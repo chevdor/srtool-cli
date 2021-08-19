@@ -9,7 +9,7 @@ pub struct SrtoolVersion {
 	name: String,
 	version: Version,
 
-	#[serde(deserialize_with= "RustcVersion::from_str")]
+	// #[serde(deserialize_with= "RustcVersion::from_str")]
 	rustc: RustcVersion,
 }
 
