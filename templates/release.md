@@ -14,7 +14,7 @@ Download the binary for your OS from below:
 ## From source
 
 ```
-cargo install --git https://github.com/chevdor/srtool-cli
+cargo install --locked --git https://github.com/chevdor/srtool-cli --tag {{ VERSION }}
 ```
 
 ## Linux
