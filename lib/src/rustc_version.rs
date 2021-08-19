@@ -10,7 +10,7 @@ pub enum RustcVersion {
 	// Dev(String),
 }
 
-pub struct Error;
+// pub struct Error;
 
 impl FromStr for RustcVersion {
 	type Err = String;

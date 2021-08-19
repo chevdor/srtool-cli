@@ -112,7 +112,7 @@ mod tests {
 	fn it_fetches_the_version() {
 		let tag = fetch_image_tag().unwrap();
 		println!("current tag = {:?}", tag);
-		assert!(tag.len() > 0);
+		assert!(!tag.is_empty());
 	}
 
 	#[test]

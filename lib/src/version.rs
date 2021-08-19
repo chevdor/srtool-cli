@@ -1,7 +1,6 @@
 use crate::rustc_version::RustcVersion;
 use semver::Version;
 use serde::{Deserialize, Serialize};
-use std::str::FromStr;
 
 /// A structure describing the output the info command
 #[derive(Debug, Serialize, Deserialize)]

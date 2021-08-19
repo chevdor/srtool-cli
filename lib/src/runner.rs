@@ -142,7 +142,7 @@ impl Runner {
 
 		output
 			.map(|o| o.stdout)
-			.map(|v| String::from_utf8(v).unwrap_or("".into()))
+			.map(|v| String::from_utf8(v).unwrap_or_else(|_| "".into()))
 			.map(|s| serde_json::from_str(&s).unwrap_or(Value::Null))
 			.map_err(|e| e.to_string())
 	}
