@@ -17,10 +17,12 @@ path = "src/main.rs"
 test = false
 
 [dependencies]
-assert_cmd = "1.0"
-clap = "3.0.0-beta.2"
-ctrlc = "3.1"
-env_logger = "0.8"
+assert_cmd = "2.0"
+# Sticking with clap 3.0.0-beta-2 for now, see https://github.com/chevdor/srtool-cli/issues/15
+clap = "= 3.0.0-beta.2"
+clap_derive = "= 3.0.0-beta.2"
+ctrlc = "3.2"
+env_logger = "0.9"
 log = "0.4"
 srtool-lib = {path = "../lib"}
 
