@@ -1,10 +1,10 @@
 # This workflow runs on every push and checks whether everything looks good
 
-name: Daily Check
+name: Weekly Check
 
 on:
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "0 3 * * 1"
 
 jobs:
   daily_check:
@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
-        rust: ["stable", "nightly"]
+        rust: ["stable", "1.54.0", "1.53.0", "nightly"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install Rust stable toolchain
