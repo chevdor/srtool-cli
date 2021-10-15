@@ -7,6 +7,14 @@ _default:
 bump level:
 	cargo workspaces version {{level}} --no-individual-tags
 
+_clippy:
+	cargo +nightly clippy
+
+_fmt:
+	cargo +nightly fmt --all -- --check
+
+check: _fmt _clippy
+
 # This will generate the usage instruction
 usage:
 	cargo run -q -- --help > doc/usage.adoc
