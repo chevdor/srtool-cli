@@ -8,7 +8,7 @@ bump level:
 	cargo workspaces version {{level}} --no-individual-tags
 
 _clippy:
-	cargo +nightly clippy
+	cargo +nightly clippy --all-features --all-targets
 
 _fmt:
 	cargo +nightly fmt --all -- --check
@@ -32,4 +32,3 @@ tag:
 md:
     #!/usr/bin/env bash
     asciidoctor -b docbook -a leveloffset=+1 -o - README_src.adoc | pandoc   --markdown-headings=atx --wrap=preserve -t markdown_strict -f docbook - > README.md
-
