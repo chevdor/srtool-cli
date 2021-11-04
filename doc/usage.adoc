@@ -1,4 +1,4 @@
-srtool-cli 0.6.0
+srtool-cli 0.7.1
 chevdor <chevdor@gmail.com>
 This utility helps starting a container from the srtool Docker image. It passes the right parameters
 and environment variables to the container. Learn more about the srtool image here:
@@ -14,10 +14,10 @@ FLAGS:
     -V, --version     Prints version information
 
 OPTIONS:
-    -i, --image <image>    Chose an alternative image. Beware to chose an image that is compatible
+    -i, --image <image>    Choose an alternative image. Beware to choose an image that is compatible
                            with the original srtool image. Using a random image, you take the risk
-                           to NOT produce exactly the same deterministic result than srtool
-                           [default: paritytech/srtool]
+                           to NOT produce exactly the same deterministic result as srtool [default:
+                           paritytech/srtool]
 
 SUBCOMMANDS:
     build      Start a new srtool container to build your runtime

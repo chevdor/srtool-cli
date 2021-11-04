@@ -1,4 +1,4 @@
-srtool-pull 0.6.0
+srtool-pull 0.7.1
 chevdor <chevdor@gmail.com>
 Simply pull the srtool image and do not run anything else
 

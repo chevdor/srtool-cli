@@ -1,4 +1,4 @@
-srtool-info 0.6.0
+srtool-info 0.7.1
 chevdor <chevdor@gmail.com>
 Provide information about the srtool container and your repo
 

@@ -31,7 +31,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
 **help**
 
-    srtool-cli 0.6.0
+    srtool-cli 0.7.1
     chevdor <chevdor@gmail.com>
     This utility helps starting a container from the srtool Docker image. It passes the right parameters
     and environment variables to the container. Learn more about the srtool image here:
@@ -47,10 +47,10 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
         -V, --version     Prints version information
 
     OPTIONS:
-        -i, --image <image>    Chose an alternative image. Beware to chose an image that is compatible
+        -i, --image <image>    Choose an alternative image. Beware to choose an image that is compatible
                                with the original srtool image. Using a random image, you take the risk
-                               to NOT produce exactly the same deterministic result than srtool
-                               [default: paritytech/srtool]
+                               to NOT produce exactly the same deterministic result as srtool [default:
+                               paritytech/srtool]
 
     SUBCOMMANDS:
         build      Start a new srtool container to build your runtime
@@ -62,7 +62,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
 **version**
 
-    srtool-version 0.6.0
+    srtool-version 0.7.1
     chevdor <chevdor@gmail.com>
     Show the versions of the srtool container. Use --version if you want the version of this executable
 
@@ -75,7 +75,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
 **info**
 
-    srtool-info 0.6.0
+    srtool-info 0.7.1
     chevdor <chevdor@gmail.com>
     Provide information about the srtool container and your repo
 
@@ -99,7 +99,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
 **pull**
 
-    srtool-pull 0.6.0
+    srtool-pull 0.7.1
     chevdor <chevdor@gmail.com>
     Simply pull the srtool image and do not run anything else
 
@@ -112,7 +112,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
 **build**
 
-    srtool-build 0.6.0
+    srtool-build 0.7.1
     chevdor <chevdor@gmail.com>
     Start a new srtool container to build your runtime
 
@@ -124,12 +124,12 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
                   another location, you can pass it here [default: .]
 
     FLAGS:
-        -a, --app         Enable the "app" mode which is a mix of json output and outputing progress
+        -a, --app         Enable the "app" mode which is a mix of json output and outputting progress
                           during the build. This flag is recommended for CI. the json output will be
                           provided as a single line at the end in compact mode
         -h, --help        Prints help information
         -j, --json        Enable json output, same than the global --json option
-            --no-cache    Passsing this flag allows completely disabling caching. As a result, no cargo-
+            --no-cache    Passing this flag allows completely disabling caching. As a result, no cargo-
                           home will be mounted to the srtool image. There is no known issue with having
                           the cache ON, this is why it is the default
         -V, --version     Prints version information

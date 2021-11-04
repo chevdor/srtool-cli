@@ -1,4 +1,4 @@
-srtool-version 0.6.0
+srtool-version 0.7.1
 chevdor <chevdor@gmail.com>
 Show the versions of the srtool container. Use --version if you want the version of this executable
 
