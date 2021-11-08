@@ -19,6 +19,15 @@ fn main() {
 	env_logger::init();
 	info!("Running srtool-cli v{}", crate_version!());
 
+	#[cfg(target_arch = "x86")]
+	debug!("Detected x86");
+
+	#[cfg(target_arch = "x86_64")]
+	debug!("Detected x86_64");
+
+	#[cfg(target_arch = "aarch64")]
+	debug!("Detected aarch64");
+
 	let opts: Opts = Opts::parse();
 	let image = opts.image;
 
