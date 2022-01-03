@@ -5,6 +5,6 @@ Simply pull the srtool image and do not run anything else
 USAGE:
     srtool pull
 
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
+OPTIONS:
+    -h, --help       Print help information
+    -V, --version    Print version information

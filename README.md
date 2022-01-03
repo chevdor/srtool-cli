@@ -33,28 +33,24 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
     srtool-cli 0.7.1
     chevdor <chevdor@gmail.com>
-    This utility helps starting a container from the srtool Docker image. It passes the right parameters
-    and environment variables to the container. Learn more about the srtool image here:
-    https://github.com/paritytech/srtool
+    srtool is cli allowing to control the srtool docker image
 
     USAGE:
-        srtool [FLAGS] [OPTIONS] <SUBCOMMAND>
-
-    FLAGS:
-        -h, --help        Prints help information
-        -j, --json        This option is DEPRECATED and has no effect
-        -n, --no-cache    Do not use the local cached tag value
-        -V, --version     Prints version information
+        srtool [OPTIONS] <SUBCOMMAND>
 
     OPTIONS:
-        -i, --image <image>    Choose an alternative image. Beware to choose an image that is compatible
+        -h, --help             Print help information
+        -i, --image <IMAGE>    Choose an alternative image. Beware to choose an image that is compatible
                                with the original srtool image. Using a random image, you take the risk
                                to NOT produce exactly the same deterministic result as srtool [default:
                                paritytech/srtool]
+        -j, --json             This option is DEPRECATED and has no effect
+        -n, --no-cache         Do not use the local cached tag value
+        -V, --version          Print version information
 
     SUBCOMMANDS:
         build      Start a new srtool container to build your runtime
-        help       Prints this message or the help of the given subcommand(s)
+        help       Print this message or the help of the given subcommand(s)
         info       Provide information about the srtool container and your repo
         pull       Simply pull the srtool image and do not run anything else
         version    Show the versions of the srtool container. Use --version if you want the version
@@ -69,9 +65,9 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
     USAGE:
         srtool version
 
-    FLAGS:
-        -h, --help       Prints help information
-        -V, --version    Prints version information
+    OPTIONS:
+        -h, --help       Print help information
+        -V, --version    Print version information
 
 **info**
 
@@ -80,22 +76,20 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
     Provide information about the srtool container and your repo
 
     USAGE:
-        srtool info [OPTIONS] --package <package> [path]
+        srtool info [OPTIONS] --package <PACKAGE> [PATH]
 
     ARGS:
-        <path>    By default, srtool will work in the current folder. If your project is located in
+        <PATH>    By default, srtool will work in the current folder. If your project is located in
                   another location, you can pass it here [default: .]
 
-    FLAGS:
-        -h, --help       Prints help information
-        -V, --version    Prints version information
-
     OPTIONS:
-        -p, --package <package>            Provide the runtime such as kusama-runtime, polkadot-runtime,
+        -h, --help                         Print help information
+        -p, --package <PACKAGE>            Provide the runtime such as kusama-runtime, polkadot-runtime,
                                            etc... [env: PACKAGE=]
-        -r, --runtime-dir <runtime-dir>    If your runtime is not in the standard location
+        -r, --runtime-dir <RUNTIME_DIR>    If your runtime is not in the standard location
                                            runtime/<chain_name> you can pass this args to help srtool
                                            find it [env: RUNTIME_DIR=]
+        -V, --version                      Print version information
 
 **pull**
 
@@ -106,9 +100,9 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
     USAGE:
         srtool pull
 
-    FLAGS:
-        -h, --help       Prints help information
-        -V, --version    Prints version information
+    OPTIONS:
+        -h, --help       Print help information
+        -V, --version    Print version information
 
 **build**
 
@@ -117,45 +111,53 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
     Start a new srtool container to build your runtime
 
     USAGE:
-        srtool build [FLAGS] [OPTIONS] --package <package> [path]
+        srtool build [OPTIONS] --package <PACKAGE> [PATH]
 
     ARGS:
-        <path>    By default, srtool will work in the current folder. If your project is located in
+        <PATH>    By default, srtool will work in the current folder. If your project is located in
                   another location, you can pass it here [default: .]
 
-    FLAGS:
-        -a, --app         Enable the "app" mode which is a mix of json output and outputting progress
-                          during the build. This flag is recommended for CI. the json output will be
-                          provided as a single line at the end in compact mode
-        -h, --help        Prints help information
-        -j, --json        Enable json output, same than the global --json option
-            --no-cache    Passing this flag allows completely disabling caching. As a result, no cargo-
-                          home will be mounted to the srtool image. There is no known issue with having
-                          the cache ON, this is why it is the default
-        -V, --version     Prints version information
-
     OPTIONS:
-            --build-opts <build-opts>
+        -a, --app
+                Enable the "app" mode which is a mix of json output and outputting progress during the
+                build. This flag is recommended for CI. the json output will be provided as a single
+                line at the end in compact mode
+
+            --build-opts <BUILD_OPTS>
                 You may pass options to cargo directly here. WARNING, if you pass this value, the
                 automatic build options for Kusama and Polkadot will not be passed and you need to take
                 care of them manually. In general, you should never use this option unless you HAVE to
                 [env: BUILD_OPTS=]
 
-            --default-features <default-features>
+            --default-features <DEFAULT_FEATURES>
                 Passing this is less involved than passing BUILD_OPTS. It allows changing the list of
                 default features while keeping the automatic features detection. This value is useless
                 if BUILD_OPTS is set [env: DEFAULT_FEATURES=]
 
-        -p, --package <package>
+        -h, --help
+                Print help information
+
+        -j, --json
+                Enable json output, same than the global --json option
+
+            --no-cache
+                Passing this flag allows completely disabling caching. As a result, no cargo-home will
+                be mounted to the srtool image. There is no known issue with having the cache ON, this
+                is why it is the default
+
+        -p, --package <PACKAGE>
                 Provide the runtime such as kusama-runtime, polkadot-runtime, etc... [env: PACKAGE=]
 
-            --profile <profile>
+            --profile <PROFILE>
                 The default profile to build runtimes is always `release`. You may override the default
                 with this flag [env: PROFILE=] [default: release]
 
-        -r, --runtime-dir <runtime-dir>
+        -r, --runtime-dir <RUNTIME_DIR>
                 If your runtime is not in the standard location runtime/<chain_name> you can pass this
                 args to help srtool find it [env: RUNTIME_DIR=]
+
+        -V, --version
+                Print version information
 
 ## Contributing
 

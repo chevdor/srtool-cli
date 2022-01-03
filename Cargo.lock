@@ -519,7 +519,7 @@ checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
 
 [[package]]
 name = "srtool-cli"
-version = "0.7.1"
+version = "0.8.0"
 dependencies = [
  "assert_cmd",
  "clap",
@@ -531,7 +531,7 @@ dependencies = [
 
 [[package]]
 name = "srtool-lib"
-version = "0.7.1"
+version = "0.8.0"
 dependencies = [
  "log",
  "serde_json",

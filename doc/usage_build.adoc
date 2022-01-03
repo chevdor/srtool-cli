@@ -3,43 +3,50 @@ chevdor <chevdor@gmail.com>
 Start a new srtool container to build your runtime
 
 USAGE:
-    srtool build [FLAGS] [OPTIONS] --package <package> [path]
+    srtool build [OPTIONS] --package <PACKAGE> [PATH]
 
 ARGS:
-    <path>    By default, srtool will work in the current folder. If your project is located in
+    <PATH>    By default, srtool will work in the current folder. If your project is located in
               another location, you can pass it here [default: .]
 
-FLAGS:
-    -a, --app         Enable the "app" mode which is a mix of json output and outputting progress
-                      during the build. This flag is recommended for CI. the json output will be
-                      provided as a single line at the end in compact mode
-    -h, --help        Prints help information
-    -j, --json        Enable json output, same than the global --json option
-        --no-cache    Passing this flag allows completely disabling caching. As a result, no cargo-
-                      home will be mounted to the srtool image. There is no known issue with having
-                      the cache ON, this is why it is the default
-    -V, --version     Prints version information
-
 OPTIONS:
-        --build-opts <build-opts>
+    -a, --app
+            Enable the "app" mode which is a mix of json output and outputting progress during the
+            build. This flag is recommended for CI. the json output will be provided as a single
+            line at the end in compact mode
+
+        --build-opts <BUILD_OPTS>
             You may pass options to cargo directly here. WARNING, if you pass this value, the
             automatic build options for Kusama and Polkadot will not be passed and you need to take
             care of them manually. In general, you should never use this option unless you HAVE to
             [env: BUILD_OPTS=]
 
-        --default-features <default-features>
+        --default-features <DEFAULT_FEATURES>
             Passing this is less involved than passing BUILD_OPTS. It allows changing the list of
             default features while keeping the automatic features detection. This value is useless
             if BUILD_OPTS is set [env: DEFAULT_FEATURES=]
 
-    -p, --package <package>
+    -h, --help
+            Print help information
+
+    -j, --json
+            Enable json output, same than the global --json option
+
+        --no-cache
+            Passing this flag allows completely disabling caching. As a result, no cargo-home will
+            be mounted to the srtool image. There is no known issue with having the cache ON, this
+            is why it is the default
+
+    -p, --package <PACKAGE>
             Provide the runtime such as kusama-runtime, polkadot-runtime, etc... [env: PACKAGE=]
 
-        --profile <profile>
+        --profile <PROFILE>
             The default profile to build runtimes is always `release`. You may override the default
             with this flag [env: PROFILE=] [default: release]
 
-    -r, --runtime-dir <runtime-dir>
+    -r, --runtime-dir <RUNTIME_DIR>
             If your runtime is not in the standard location runtime/<chain_name> you can pass this
             args to help srtool find it [env: RUNTIME_DIR=]
 
+    -V, --version
+            Print version information
