@@ -1,4 +1,4 @@
-srtool-cli 0.7.1
+srtool-cli 0.8.0
 chevdor <chevdor@gmail.com>
 srtool is cli allowing to control the srtool docker image
 

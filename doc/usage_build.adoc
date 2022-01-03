@@ -1,4 +1,4 @@
-srtool-build 0.7.1
+srtool-build 0.8.0
 chevdor <chevdor@gmail.com>
 Start a new srtool container to build your runtime
 
