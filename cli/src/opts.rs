@@ -1,11 +1,10 @@
-use clap::{crate_authors, crate_version, AppSettings, Clap};
+use clap::{crate_authors, crate_version, Parser, Subcommand};
 use std::env;
 use std::path::PathBuf;
 
 /// Control the srtool docker container
-#[derive(Clap)]
-#[clap(version = crate_version!(), author = crate_authors!())]
-#[clap(setting = AppSettings::ColoredHelp)]
+#[derive(Parser)]
+#[clap(author, version, about)]
 pub struct Opts {
 	/// Choose an alternative image. Beware to choose an image that is
 	/// compatible with the original srtool image. Using a random image,
@@ -30,7 +29,7 @@ pub struct Opts {
 /// This utility helps starting a container from the srtool Docker image.
 /// It passes the right parameters and environment variables to the container.
 /// Learn more about the srtool image here: https://github.com/paritytech/srtool
-#[derive(Clap)]
+#[derive(Subcommand)]
 pub enum SubCommand {
 	/// Simply pull the srtool image and do not run anything else
 	#[clap(version = crate_version!(), author = crate_authors!())]
@@ -51,11 +50,11 @@ pub enum SubCommand {
 }
 
 /// Build opts
-#[derive(Clap)]
+#[derive(Parser)]
 pub struct PullOpts;
 
 /// Build opts
-#[derive(Clap)]
+#[derive(Parser)]
 pub struct BuildOpts {
 	/// Provide the runtime such as kusama-runtime, polkadot-runtime, etc...
 	#[clap(long, short, env = "PACKAGE")]
@@ -107,7 +106,7 @@ pub struct BuildOpts {
 }
 
 /// Info opts
-#[derive(Clap)]
+#[derive(Parser)]
 pub struct InfoOpts {
 	/// By default, srtool will work in the current folder.
 	/// If your project is located in another location, you can pass it here.
@@ -125,5 +124,5 @@ pub struct InfoOpts {
 }
 
 /// Version opts
-#[derive(Clap)]
+#[derive(Parser)]
 pub struct VersionOpts;
