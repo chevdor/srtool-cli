@@ -10,7 +10,7 @@ pub struct Opts {
 	/// compatible with the original srtool image. Using a random image,
 	/// you take the risk to NOT produce exactly the same deterministic
 	/// result as srtool.
-	#[clap(short, long, default_value = "paritytech/srtool")]
+	#[clap(short, long, default_value = "paritytech/srtool", global = true)]
 	pub image: String,
 
 	/// This option is DEPRECATED and has no effect
