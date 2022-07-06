@@ -17,9 +17,7 @@ path = "src/main.rs"
 test = false
 
 [dependencies]
-assert_cmd = "2.0"
-# Sticking with clap 3.0.0-beta-2 for now, see https://github.com/chevdor/srtool-cli/issues/15
-clap = {version = "3.0", features = ["derive", "env", "unicode", "cargo"]}
+clap = {version = "3.2", features = ["derive", "env", "unicode", "cargo"]}
 ctrlc = "3.2"
 env_logger = "0.9"
 log = "0.4"
