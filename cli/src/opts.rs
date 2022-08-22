@@ -107,6 +107,10 @@ pub struct BuildOpts {
 	/// Run docker image as root
 	#[clap(long)]
 	pub root: bool,
+
+	/// Run the build script using the verbose option
+	#[clap(long)]
+	pub verbose: bool,
 }
 
 /// Info opts

@@ -60,6 +60,8 @@ fn main() {
 				String::new()
 			};
 			let root_opts = if build_opts.root { "-u root" } else { "" };
+			let verbose_opts = if build_opts.verbose { "-e VERBOSE=1" } else { "" };
+
 			debug!("app: '{}'", &app);
 			debug!("json: '{}'", &json);
 			debug!("chain: '{}'", &chain);
@@ -79,6 +81,7 @@ fn main() {
 				-e DEFAULT_FEATURES={default_features} \
 				-e PROFILE={profile} \
 				-e IMAGE={digest} \
+				{verbose} \
 				-v {dir}:/build \
 				{cache_mount} \
 				{root} \
@@ -96,6 +99,7 @@ fn main() {
 				app = app,
 				digest = digest,
 				root = root_opts,
+				verbose = verbose_opts,
 			)
 		}
 
