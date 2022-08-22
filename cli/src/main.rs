@@ -59,7 +59,7 @@ fn main() {
 			} else {
 				String::new()
 			};
-
+			let root_opts = if build_opts.root { "-u root" } else { "" };
 			debug!("app: '{}'", &app);
 			debug!("json: '{}'", &json);
 			debug!("chain: '{}'", &chain);
@@ -81,6 +81,7 @@ fn main() {
 				-e IMAGE={digest} \
 				-v {dir}:/build \
 				{cache_mount} \
+				{root} \
 				{image}:{tag} build{app}{json}",
 				package = build_opts.package,
 				dir = path.display(),
@@ -94,6 +95,7 @@ fn main() {
 				json = json,
 				app = app,
 				digest = digest,
+				root = root_opts,
 			)
 		}
 
