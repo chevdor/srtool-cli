@@ -104,7 +104,7 @@ pub struct BuildOpts {
 	#[clap(long)]
 	pub no_cache: bool,
 
-	/// Run docker image as root
+	/// Run docker image as root, this helps on Linux based systems.
 	#[clap(long)]
 	pub root: bool,
 

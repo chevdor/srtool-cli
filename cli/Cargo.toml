@@ -3,12 +3,20 @@ authors = ["chevdor <chevdor@gmail.com>"]
 description = "srtool is cli allowing to control the srtool docker image"
 edition = "2021"
 homepage = "https://github.com/chevdor/subwasm"
-keywords = ["wasm", "cli", "substrate", "blockchain", "runtime", "polkadot", "kusama"]
+keywords = [
+  "wasm",
+  "cli",
+  "substrate",
+  "blockchain",
+  "runtime",
+  "polkadot",
+  "kusama",
+]
 license = "MIT"
 name = "srtool-cli"
 readme = "README.md"
 repository = "https://github.com/chevdor/srtool-cli"
-version = "0.8.0"
+version = "0.9.0"
 
 [[bin]]
 bench = false
@@ -17,16 +25,14 @@ path = "src/main.rs"
 test = false
 
 [dependencies]
-clap = {version = "3.2", features = ["derive", "env", "unicode", "cargo"]}
+clap = { version = "3.2", features = ["derive", "env", "unicode", "cargo"] }
 ctrlc = "3.2"
 env_logger = "0.9"
 log = "0.4"
-srtool-lib = {path = "../lib"}
+srtool-lib = { path = "../lib" }
 
 [package.metadata.deb]
-assets = [
-  ["target/release/srtool", "usr/bin/", "755"],
-]
+assets = [["target/release/srtool", "usr/bin/", "755"]]
 copyright = "2021, Wilfried Kopp aka. Chevdor <chevdor@gmail.com>"
 depends = "$auto"
 extended-description = """\

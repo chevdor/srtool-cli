@@ -31,7 +31,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
 **help**
 
-    srtool-cli 0.7.1
+    srtool-cli 0.9.0
     chevdor <chevdor@gmail.com>
     srtool is cli allowing to control the srtool docker image
 
@@ -54,24 +54,28 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
         info       Provide information about the srtool container and your repo
         pull       Simply pull the srtool image and do not run anything else
         version    Show the versions of the srtool container. Use --version if you want the version
-                   of this executable
+                       of this executable
 
 **version**
 
-    srtool-version 0.7.1
+    srtool-version 0.9.0
     chevdor <chevdor@gmail.com>
     Show the versions of the srtool container. Use --version if you want the version of this executable
 
     USAGE:
-        srtool version
+        srtool version [OPTIONS]
 
     OPTIONS:
-        -h, --help       Print help information
-        -V, --version    Print version information
+        -h, --help             Print help information
+        -i, --image <IMAGE>    Choose an alternative image. Beware to choose an image that is compatible
+                               with the original srtool image. Using a random image, you take the risk
+                               to NOT produce exactly the same deterministic result as srtool [default:
+                               paritytech/srtool]
+        -V, --version          Print version information
 
 **info**
 
-    srtool-info 0.7.1
+    srtool-info 0.9.0
     chevdor <chevdor@gmail.com>
     Provide information about the srtool container and your repo
 
@@ -84,6 +88,10 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
     OPTIONS:
         -h, --help                         Print help information
+        -i, --image <IMAGE>                Choose an alternative image. Beware to choose an image that
+                                           is compatible with the original srtool image. Using a random
+                                           image, you take the risk to NOT produce exactly the same
+                                           deterministic result as srtool [default: paritytech/srtool]
         -p, --package <PACKAGE>            Provide the runtime such as kusama-runtime, polkadot-runtime,
                                            etc... [env: PACKAGE=]
         -r, --runtime-dir <RUNTIME_DIR>    If your runtime is not in the standard location
@@ -93,20 +101,24 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
 **pull**
 
-    srtool-pull 0.7.1
+    srtool-pull 0.9.0
     chevdor <chevdor@gmail.com>
     Simply pull the srtool image and do not run anything else
 
     USAGE:
-        srtool pull
+        srtool pull [OPTIONS]
 
     OPTIONS:
-        -h, --help       Print help information
-        -V, --version    Print version information
+        -h, --help             Print help information
+        -i, --image <IMAGE>    Choose an alternative image. Beware to choose an image that is compatible
+                               with the original srtool image. Using a random image, you take the risk
+                               to NOT produce exactly the same deterministic result as srtool [default:
+                               paritytech/srtool]
+        -V, --version          Print version information
 
 **build**
 
-    srtool-build 0.7.1
+    srtool-build 0.9.0
     chevdor <chevdor@gmail.com>
     Start a new srtool container to build your runtime
 
@@ -137,6 +149,11 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
         -h, --help
                 Print help information
 
+        -i, --image <IMAGE>
+                Choose an alternative image. Beware to choose an image that is compatible with the
+                original srtool image. Using a random image, you take the risk to NOT produce exactly
+                the same deterministic result as srtool [default: paritytech/srtool]
+
         -j, --json
                 Enable json output, same than the global --json option
 
@@ -156,8 +173,14 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
                 If your runtime is not in the standard location runtime/<chain_name> you can pass this
                 args to help srtool find it [env: RUNTIME_DIR=]
 
+            --root
+                Run docker image as root, this helps on Linux based systems
+
         -V, --version
                 Print version information
+
+            --verbose
+                Run the build script using the verbose option
 
 ## Contributing
 
