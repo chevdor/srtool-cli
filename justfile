@@ -1,18 +1,25 @@
 VERSION := `toml get cli/Cargo.toml package.version | jq -r`
 
 _default:
-    just --list
+	just --choose --chooser "fzf +s -x --tac --cycle"
+
+# Show the list of tasks
+help:
+	just --list
 
 # Before releasing, this helps bumping up the version numbers
 bump level:
 	cargo workspaces version {{level}} --no-individual-tags
 
+# Clippy
 _clippy:
 	cargo +nightly clippy --all-features --all-targets
 
+# Rust fmt
 _fmt:
 	cargo +nightly fmt --all -- --check
 
+# Fmt + clippy
 check: _fmt _clippy
 
 # This will generate the usage instruction
@@ -28,9 +35,18 @@ tag:
     @echo Tagging v{{VERSION}}
     git tag -f v{{VERSION}}
 
+# Create and push a tag matching the current version
+tag_push: tag
+	git push origin v{{VERSION}}
+
 # Converts our AsciiDoc documentation to Markdown
 md:
     #!/usr/bin/env bash
     asciidoctor -b docbook -a leveloffset=+1 -o - README_src.adoc | pandoc   --markdown-headings=atx --wrap=preserve -t markdown_strict -f docbook - > README.md
 
+# Generate the doc: usage + md
 doc: usage md
+
+# Run the tests using nextest
+test:
+	cargo nextest run --no-fail-fast
