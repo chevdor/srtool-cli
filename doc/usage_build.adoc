@@ -1,4 +1,4 @@
-srtool-build 0.8.0
+srtool-build 0.9.0
 chevdor <chevdor@gmail.com>
 Start a new srtool container to build your runtime
 
@@ -29,6 +29,11 @@ OPTIONS:
     -h, --help
             Print help information
 
+    -i, --image <IMAGE>
+            Choose an alternative image. Beware to choose an image that is compatible with the
+            original srtool image. Using a random image, you take the risk to NOT produce exactly
+            the same deterministic result as srtool [default: paritytech/srtool]
+
     -j, --json
             Enable json output, same than the global --json option
 
@@ -48,5 +53,11 @@ OPTIONS:
             If your runtime is not in the standard location runtime/<chain_name> you can pass this
             args to help srtool find it [env: RUNTIME_DIR=]
 
+        --root
+            Run docker image as root, this helps on Linux based systems
+
     -V, --version
             Print version information
+
+        --verbose
+            Run the build script using the verbose option

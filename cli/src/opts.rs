@@ -103,6 +103,14 @@ pub struct BuildOpts {
 	/// There is no known issue with having the cache ON, this is why it is the default.
 	#[clap(long)]
 	pub no_cache: bool,
+
+	/// Run docker image as root, this helps on Linux based systems.
+	#[clap(long)]
+	pub root: bool,
+
+	/// Run the build script using the verbose option
+	#[clap(long)]
+	pub verbose: bool,
 }
 
 /// Info opts
