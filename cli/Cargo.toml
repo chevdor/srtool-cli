@@ -41,3 +41,6 @@ license-file = ["LICENSE", "0"]
 maintainer = "Wilfried Kopp aka. Chevdor <chevdor@gmail.com>"
 priority = "optional"
 section = "utility"
+
+[dev-dependencies]
+assert_cmd = "2.0"
