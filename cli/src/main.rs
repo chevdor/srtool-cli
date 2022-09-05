@@ -133,7 +133,7 @@ fn main() {
 	debug!("command = {:?}", command);
 
 	if cfg!(target_os = "windows") {
-		Command::new("cmd").args(&["/C", command.as_str()]).output().expect("failed to execute process");
+		Command::new("cmd").args(["/C", command.as_str()]).output().expect("failed to execute process");
 	} else {
 		let _ =
 			Command::new("sh").arg("-c").arg(command).spawn().expect("failed to execute process").wait_with_output();

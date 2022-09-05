@@ -10,6 +10,7 @@ use std::{
 const CACHE_FILE: &str = "srtool-tag-latest.txt";
 
 /// Fetch the latest image tag
+#[allow(clippy::result_large_err)]
 pub fn fetch_image_tag() -> Result<String, ureq::Error> {
 	debug!("Fetching latest version from github");
 	let url = "https://raw.githubusercontent.com/paritytech/srtool/master/RUSTC_VERSION";
@@ -19,6 +20,7 @@ pub fn fetch_image_tag() -> Result<String, ureq::Error> {
 }
 
 /// Get the latest image. it is fetched from cache we have a version that is younger than `cache_validity` in seconds.
+#[allow(clippy::result_large_err)]
 pub fn get_image_tag(cache_validity: Option<u64>) -> Result<String, ureq::Error> {
 	let env_tag = env::var("SRTOOL_TAG");
 	if let Ok(tag) = env_tag {
@@ -76,7 +78,7 @@ pub fn get_image_digest(image: &str, tag: &str) -> Option<String> {
 	let command = format!("docker inspect {image}:{tag}", image = image, tag = tag);
 
 	let output = if cfg!(target_os = "windows") {
-		Command::new("cmd").args(&["/C", command.as_str()]).output()
+		Command::new("cmd").args(["/C", command.as_str()]).output()
 	} else {
 		Command::new("sh").arg("-c").arg(command).output()
 	};
