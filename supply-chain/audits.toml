@@ -1,0 +1,8 @@
+
+# cargo-vet audits file
+
+[[audits.assert_cmd]]
+who = "Chevdor <chevdor@gmail.com>"
+criteria = "safe-to-run"
+version = "2.0.4"
+
