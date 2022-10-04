@@ -14,8 +14,14 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+
+      - name: Install Rust nightly toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
           components: clippy, rustfmt
-      
+
       - name: Install Rust tooling
         uses: taiki-e/install-action@v1
         with:
@@ -26,12 +32,14 @@ jobs:
       - name: Cargo fmt
         uses: actions-rs/cargo@v1
         with:
+          toolchain: nightly
           command: fmt
           args: --all -- --check
 
       - name: Cargo clippy
         uses: actions-rs/cargo@v1
         with:
+          toolchain: nightly
           command: clippy
           args: -- -D warnings
 
