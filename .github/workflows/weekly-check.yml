@@ -29,6 +29,11 @@ jobs:
           toolchain: nightly
           components: clippy, rustfmt
 
+      - name: Install Rust tooling
+        uses: taiki-e/install-action@v1
+        with:
+          tool: nextest
+
       - uses: actions/checkout@v2
 
       - name: Cargo fmt
