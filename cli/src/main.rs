@@ -40,17 +40,17 @@ fn main() {
 
 	let command = match opts.subcmd {
 		SubCommand::Pull(_) => {
-			println!("Found {tag}, we will be using {image}:{tag} for the build", tag = tag, image = image);
-			format!("docker pull {image}:{tag}", image = image, tag = tag,)
+			println!("Found {tag}, we will be using {image}:{tag} for the build");
+			format!("docker pull {image}:{tag}")
 		}
 
 		SubCommand::Build(build_opts) => {
-			println!("Found {tag}, we will be using {image}:{tag} for the build", tag = tag, image = image);
+			println!("Found {tag}, we will be using {image}:{tag} for the build");
 
 			let app = if build_opts.app { " --app" } else { "" };
 			let json = if opts.json || build_opts.json { " --json" } else { "" };
 			let chain = build_opts.package.replace("-runtime", "");
-			let default_runtime_dir = format!("runtime/{}", chain);
+			let default_runtime_dir = format!("runtime/{chain}");
 			let runtime_dir = build_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
 			let tmpdir = env::temp_dir().join("cargo");
 			let digest = get_image_digest(&image, &tag).unwrap_or_default();
@@ -106,7 +106,7 @@ fn main() {
 		SubCommand::Info(info_opts) => {
 			let path = fs::canonicalize(&info_opts.path).unwrap();
 			let chain = info_opts.package.replace("-runtime", "");
-			let default_runtime_dir = format!("runtime/{}", chain);
+			let default_runtime_dir = format!("runtime/{chain}");
 			let runtime_dir = info_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
 
 			debug!("chain: '{}'", &chain);
@@ -126,7 +126,7 @@ fn main() {
 		}
 
 		SubCommand::Version(_) => {
-			format!("docker run --name srtool --rm {image}:{tag} version", image = image, tag = tag,)
+			format!("docker run --name srtool --rm {image}:{tag} version")
 		}
 	};
 

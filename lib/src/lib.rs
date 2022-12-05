@@ -75,7 +75,7 @@ pub fn clear_cache() {
 
 // docker inspect paritytech/srtool:1.53.0 | jq -r '.[0].RepoDigests[0]'
 pub fn get_image_digest(image: &str, tag: &str) -> Option<String> {
-	let command = format!("docker inspect {image}:{tag}", image = image, tag = tag);
+	let command = format!("docker inspect {image}:{tag}");
 
 	let output = if cfg!(target_os = "windows") {
 		Command::new("cmd").args(["/C", command.as_str()]).output()
