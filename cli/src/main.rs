@@ -1,5 +1,5 @@
 mod opts;
-use clap::{crate_version, StructOpt};
+use clap::{crate_version, Parser};
 use log::{debug, info};
 use opts::*;
 use srtool_lib::*;
