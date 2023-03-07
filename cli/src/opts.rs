@@ -27,7 +27,6 @@ pub struct Opts {
 	/// Subcommands are commands passed to `srtool`.
 	#[clap(subcommand)]
 	pub subcmd: SubCommand,
-
 }
 
 /// This utility helps starting a container from the srtool Docker image.

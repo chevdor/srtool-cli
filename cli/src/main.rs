@@ -36,7 +36,7 @@ fn main() {
 
 	let tag = get_image_tag(Some(ONE_HOUR)).expect("Issue getting the image tag");
 
-	info!("Using {}:{}", image, tag);
+	info!("Using {image}:{tag}");
 
 	let engine = opts.engine;
 
@@ -64,17 +64,24 @@ fn main() {
 			let root_opts = if build_opts.root { "-u root" } else { "" };
 			let verbose_opts = if build_opts.verbose { "-e VERBOSE=1" } else { "" };
 
-			debug!("engine: '{}'", &engine);
-			debug!("app: '{}'", &app);
-			debug!("json: '{}'", &json);
-			debug!("chain: '{}'", &chain);
-			debug!("default_runtime_dir: '{}'", &default_runtime_dir);
+			debug!("engine: '{engine}'");
+			debug!("app: '{app}'");
+			debug!("json: '{json}'");
+			debug!("chain: '{chain}'");
+			debug!("default_runtime_dir: '{default_runtime_dir}'");
 			debug!("runtime_dir: '{}'", &runtime_dir.display());
 			debug!("tmpdir: '{}'", &tmpdir.display());
-			debug!("digest: '{}'", &digest);
+			debug!("digest: '{digest}'");
 			debug!("no-cache: '{}'", build_opts.no_cache);
 
 			let path = fs::canonicalize(&build_opts.path).unwrap();
+
+			let package = build_opts.package;
+			let profile = build_opts.profile;
+			let dir = path.display();
+			let runtime_dir = runtime_dir.display();
+			let c_build_opts = build_opts.build_opts.unwrap_or_else(|| String::from(""));
+			let default_features = build_opts.default_features.unwrap_or_else(|| String::from(""));
 
 			format!(
 				"{engine} run --name srtool --rm \
@@ -84,26 +91,11 @@ fn main() {
 				-e DEFAULT_FEATURES={default_features} \
 				-e PROFILE={profile} \
 				-e IMAGE={digest} \
-				{verbose} \
+				{verbose_opts} \
 				-v {dir}:/build \
 				{cache_mount} \
-				{root} \
-				{image}:{tag} build{app}{json}",
-				engine = engine,
-				package = build_opts.package,
-				dir = path.display(),
-				cache_mount = cache_mount,
-				image = image,
-				tag = tag,
-				runtime_dir = runtime_dir.display(),
-				c_build_opts = build_opts.build_opts.unwrap_or_else(|| String::from("")),
-				default_features = build_opts.default_features.unwrap_or_else(|| String::from("")),
-				profile = build_opts.profile,
-				json = json,
-				app = app,
-				digest = digest,
-				root = root_opts,
-				verbose = verbose_opts,
+				{root_opts} \
+				{image}:{tag} build{app}{json}"
 			)
 		}
 
@@ -112,21 +104,18 @@ fn main() {
 			let chain = info_opts.package.replace("-runtime", "");
 			let default_runtime_dir = format!("runtime/{chain}");
 			let runtime_dir = info_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
+			let rtm_dir = runtime_dir.display();
 
-			debug!("chain: '{}'", &chain);
-			debug!("default_runtime_dir: '{}'", &default_runtime_dir);
-			debug!("runtime_dir: '{}'", &runtime_dir.display());
+			debug!("chain: '{chain}'");
+			debug!("default_runtime_dir: '{default_runtime_dir}'");
+			debug!("runtime_dir: '{rtm_dir}'");
+			let dir = path.display();
 
 			format!(
 				"{engine} run --name srtool --rm \
 					-v {dir}:/build \
-					-e RUNTIME_DIR={runtime_dir} \
+					-e RUNTIME_DIR={rtm_dir} \
 					{image}:{tag} info",
-				engine = engine,
-				dir = path.display(),
-				runtime_dir = runtime_dir.display(),
-				image = image,
-				tag = tag,
 			)
 		}
 
