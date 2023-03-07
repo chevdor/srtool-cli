@@ -1,23 +1,14 @@
-srtool-info 0.9.0
-chevdor <chevdor@gmail.com>
 Provide information about the srtool container and your repo
 
-USAGE:
-    srtool info [OPTIONS] --package <PACKAGE> [PATH]
+Usage: srtool info [OPTIONS] --package <PACKAGE> [PATH]
 
-ARGS:
-    <PATH>    By default, srtool will work in the current folder. If your project is located in
-              another location, you can pass it here [default: .]
+Arguments:
+  [PATH]  By default, srtool will work in the current folder. If your project is located in another location, you can pass it here [default: .]
 
-OPTIONS:
-    -h, --help                         Print help information
-    -i, --image <IMAGE>                Choose an alternative image. Beware to choose an image that
-                                       is compatible with the original srtool image. Using a random
-                                       image, you take the risk to NOT produce exactly the same
-                                       deterministic result as srtool [default: paritytech/srtool]
-    -p, --package <PACKAGE>            Provide the runtime such as kusama-runtime, polkadot-runtime,
-                                       etc... [env: PACKAGE=]
-    -r, --runtime-dir <RUNTIME_DIR>    If your runtime is not in the standard location
-                                       runtime/<chain_name> you can pass this args to help srtool
-                                       find it [env: RUNTIME_DIR=]
-    -V, --version                      Print version information
+Options:
+  -i, --image <IMAGE>              Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool [default: paritytech/srtool]
+  -p, --package <PACKAGE>          Provide the runtime such as kusama-runtime, polkadot-runtime, etc... [env: PACKAGE=]
+  -r, --runtime-dir <RUNTIME_DIR>  If your runtime is not in the standard location runtime/<chain_name> you can pass this args to help srtool find it [env: RUNTIME_DIR=]
+  -e, --engine <ENGINE>            [default: docker]
+  -h, --help                       Print help
+  -V, --version                    Print version
