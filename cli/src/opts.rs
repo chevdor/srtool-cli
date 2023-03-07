@@ -21,9 +21,13 @@ pub struct Opts {
 	#[clap(short, long)]
 	pub no_cache: bool,
 
+	#[clap(short, long, default_value = "docker", global = true)]
+	pub engine: String,
+
 	/// Subcommands are commands passed to `srtool`.
 	#[clap(subcommand)]
 	pub subcmd: SubCommand,
+
 }
 
 /// This utility helps starting a container from the srtool Docker image.

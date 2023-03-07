@@ -38,6 +38,8 @@ fn main() {
 
 	info!("Using {}:{}", image, tag);
 
+	let engine = opts.engine;
+
 	let command = match opts.subcmd {
 		SubCommand::Pull(_) => {
 			println!("Found {tag}, we will be using {image}:{tag} for the build");
@@ -62,6 +64,7 @@ fn main() {
 			let root_opts = if build_opts.root { "-u root" } else { "" };
 			let verbose_opts = if build_opts.verbose { "-e VERBOSE=1" } else { "" };
 
+			debug!("engine: '{}'", &engine);
 			debug!("app: '{}'", &app);
 			debug!("json: '{}'", &json);
 			debug!("chain: '{}'", &chain);
@@ -74,7 +77,7 @@ fn main() {
 			let path = fs::canonicalize(&build_opts.path).unwrap();
 
 			format!(
-				"docker run --name srtool --rm \
+				"{engine} run --name srtool --rm \
 				-e PACKAGE={package} \
 				-e RUNTIME_DIR={runtime_dir} \
 				-e BUILD_OPTS={c_build_opts} \
@@ -86,6 +89,7 @@ fn main() {
 				{cache_mount} \
 				{root} \
 				{image}:{tag} build{app}{json}",
+				engine = engine,
 				package = build_opts.package,
 				dir = path.display(),
 				cache_mount = cache_mount,
@@ -114,10 +118,11 @@ fn main() {
 			debug!("runtime_dir: '{}'", &runtime_dir.display());
 
 			format!(
-				"docker run --name srtool --rm \
+				"{engine} run --name srtool --rm \
 					-v {dir}:/build \
 					-e RUNTIME_DIR={runtime_dir} \
 					{image}:{tag} info",
+				engine = engine,
 				dir = path.display(),
 				runtime_dir = runtime_dir.display(),
 				image = image,
@@ -126,7 +131,7 @@ fn main() {
 		}
 
 		SubCommand::Version(_) => {
-			format!("docker run --name srtool --rm {image}:{tag} version")
+			format!("{engine} run --name srtool --rm {image}:{tag} version", engine = engine, image = image, tag = tag)
 		}
 	};
 
