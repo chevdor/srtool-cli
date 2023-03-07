@@ -6,15 +6,13 @@ homepage = "https://github.com/chevdor/subwasm"
 keywords = [
   "wasm",
   "cli",
-  "substrate",
-  "blockchain",
   "runtime",
   "polkadot",
   "kusama",
 ]
 license = "MIT"
 name = "srtool-cli"
-readme = "README.md"
+readme = "../README.md"
 repository = "https://github.com/chevdor/srtool-cli"
 version = "0.10.0"
 
