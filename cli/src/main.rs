@@ -7,9 +7,9 @@ use std::path::PathBuf;
 use std::process::Command;
 use std::{env, fs};
 
-fn handle_exit() {
+fn handle_exit(engine: &str) {
 	println!("Killing srtool container, your build was not finished...");
-	let cmd = "docker rm -f srtool".to_string();
+	let cmd = format!("{engine} rm -f srtool").to_string();
 	let _ = Command::new("sh").arg("-c").arg(cmd).spawn().expect("failed to execute cleaning process").wait();
 	println!("Exiting");
 	std::process::exit(0);
@@ -21,13 +21,15 @@ fn main() {
 
 	let opts: Opts = Opts::parse();
 	let image = opts.image;
+	let engine = opts.engine;
 
 	if opts.no_cache {
 		clear_cache();
 	}
 
+	let engine_clone = engine.clone();
 	ctrlc::set_handler(move || {
-		handle_exit();
+		handle_exit(&engine_clone);
 	})
 	.expect("Error setting Ctrl-C handler");
 
@@ -38,12 +40,10 @@ fn main() {
 
 	info!("Using {image}:{tag}");
 
-	let engine = opts.engine;
-
 	let command = match opts.subcmd {
 		SubCommand::Pull(_) => {
 			println!("Found {tag}, we will be using {image}:{tag} for the build");
-			format!("docker pull {image}:{tag}")
+			format!("{engine} pull {image}:{tag}")
 		}
 
 		SubCommand::Build(build_opts) => {
