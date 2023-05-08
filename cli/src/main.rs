@@ -126,12 +126,17 @@ fn main() {
 
 	debug!("command = {:?}", command);
 
-	if cfg!(target_os = "windows") {
-		Command::new("cmd").args(["/C", command.as_str()]).output().expect("failed to execute process");
+	let status = if cfg!(target_os = "windows") {
+		Command::new("cmd").args(["/C", command.as_str()]).output().expect("failed to execute process").status
 	} else {
-		let _ =
-			Command::new("sh").arg("-c").arg(command).spawn().expect("failed to execute process").wait_with_output();
-	}
+		match Command::new("sh").arg("-c").arg(command).spawn().expect("failed to execute process").wait_with_output() {
+			Ok(result) => result.status,
+			_ => std::process::exit(1),
+		}
+	};
+
+	// Exit with error code of 1 if we don't have an exit code
+	std::process::exit(status.code().unwrap_or(1));
 }
 
 #[cfg(test)]
