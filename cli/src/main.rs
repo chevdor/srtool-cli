@@ -7,31 +7,36 @@ use std::path::PathBuf;
 use std::process::Command;
 use std::{env, fs};
 
-fn handle_exit(engine: &str) {
+mod error;
+use error::Error;
+
+mod container_engine;
+use container_engine::ContainerEngine;
+
+
+fn handle_exit(engine: ContainerEngine) {
 	println!("Killing srtool container, your build was not finished...");
-	let cmd = format!("{engine} rm -f srtool").to_string();
+	let cmd = format!("{engine} rm -f srtool");
 	let _ = Command::new("sh").arg("-c").arg(cmd).spawn().expect("failed to execute cleaning process").wait();
 	println!("Exiting");
 	std::process::exit(0);
 }
 
-fn main() {
+fn main() -> Result<(), Error> {
 	env_logger::init();
 	info!("Running srtool-cli v{}", crate_version!());
 
 	let opts: Opts = Opts::parse();
-	let image = opts.image;
-	let engine = opts.engine;
+	let image = &opts.image;
+	let engine: ContainerEngine = opts.get_container_engine()?;
 
 	if opts.no_cache {
 		clear_cache();
 	}
 
-	let engine_clone = engine.clone();
 	ctrlc::set_handler(move || {
-		handle_exit(&engine_clone);
-	})
-	.expect("Error setting Ctrl-C handler");
+		handle_exit(engine);
+	}).map_err(|_|Error::CtrlCSetupError)?;
 
 	debug!("Checking what is the latest available tag...");
 	const ONE_HOUR: u64 = 60 * 60;
@@ -132,6 +137,8 @@ fn main() {
 		let _ =
 			Command::new("sh").arg("-c").arg(command).spawn().expect("failed to execute process").wait_with_output();
 	}
+
+	Ok(())
 }
 
 #[cfg(test)]
