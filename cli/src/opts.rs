@@ -67,7 +67,7 @@ impl Opts {
 			}
 		}
 
-		return Err(Error::UnknownContainerEngine);
+		Err(Error::UnknownContainerEngine)
 
 	}
 }

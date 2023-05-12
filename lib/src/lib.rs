@@ -97,7 +97,7 @@ mod tests {
 	#[test]
 	fn it_fetches_the_version() {
 		let tag = fetch_image_tag().unwrap();
-		println!("current tag = {:?}", tag);
+		println!("current tag = {tag:?}");
 		assert!(!tag.is_empty());
 	}
 
@@ -106,7 +106,7 @@ mod tests {
 	fn it_gets_the_image_digest() {
 		let image = "paritytech/srtool";
 		let tag = fetch_image_tag().unwrap();
-		println!("Checking digest for {}:{}", image, tag);
+		println!("Checking digest for {image}:{tag}");
 		let result = get_image_digest(image, &tag);
 		assert!(result.is_some());
 	}

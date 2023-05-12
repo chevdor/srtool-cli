@@ -36,7 +36,7 @@ fn main() -> Result<(), Error> {
 
 	ctrlc::set_handler(move || {
 		handle_exit(engine);
-	}).map_err(|_|Error::CtrlCSetupError)?;
+	}).map_err(|_|Error::CtrlCSetup)?;
 
 	debug!("Checking what is the latest available tag...");
 	const ONE_HOUR: u64 = 60 * 60;
@@ -60,7 +60,7 @@ fn main() -> Result<(), Error> {
 			let default_runtime_dir = format!("runtime/{chain}");
 			let runtime_dir = build_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
 			let tmpdir = env::temp_dir().join("cargo");
-			let digest = get_image_digest(&image, &tag).unwrap_or_default();
+			let digest = get_image_digest(image, &tag).unwrap_or_default();
 			let cache_mount = if !build_opts.no_cache {
 				format!("-v {tmpdir}:/cargo-home", tmpdir = tmpdir.display())
 			} else {
@@ -125,7 +125,7 @@ fn main() -> Result<(), Error> {
 		}
 
 		SubCommand::Version(_) => {
-			format!("{engine} run --name srtool --rm {image}:{tag} version", engine = engine, image = image, tag = tag)
+			format!("{engine} run --name srtool --rm {image}:{tag} version")
 		}
 	};
 
