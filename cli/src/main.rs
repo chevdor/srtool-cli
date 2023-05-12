@@ -13,7 +13,6 @@ use error::Error;
 mod container_engine;
 use container_engine::ContainerEngine;
 
-
 fn handle_exit(engine: ContainerEngine) {
 	println!("Killing srtool container, your build was not finished...");
 	let cmd = format!("{engine} rm -f srtool");
@@ -36,7 +35,8 @@ fn main() -> Result<(), Error> {
 
 	ctrlc::set_handler(move || {
 		handle_exit(engine);
-	}).map_err(|_|Error::CtrlCSetup)?;
+	})
+	.map_err(|_| Error::CtrlCSetup)?;
 
 	debug!("Checking what is the latest available tag...");
 	const ONE_HOUR: u64 = 60 * 60;

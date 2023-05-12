@@ -1,6 +1,5 @@
 use std::string::FromUtf8Error;
 
-
 #[derive(Debug)]
 pub enum Error {
 	UnknownContainerEngine,

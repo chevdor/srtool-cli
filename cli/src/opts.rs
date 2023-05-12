@@ -1,6 +1,6 @@
 use clap::{crate_authors, crate_version, Parser, Subcommand};
-use std::{env, process::Command};
 use std::path::PathBuf;
+use std::{env, process::Command};
 
 use crate::{ContainerEngine, Error};
 
@@ -39,7 +39,7 @@ impl Opts {
 			"docker" => {
 				println!("WARNING: You are using docker. We recommend using podman instead.");
 				Ok(ContainerEngine::Docker)
-			},
+			}
 			_ => Err(Error::UnknownContainerEngine),
 		}
 	}
@@ -55,7 +55,7 @@ impl Opts {
 				return Ok(ContainerEngine::Docker);
 			}
 		}
-		
+
 		let docker_output = Command::new("docker").arg("--version").output().ok();
 		if let Some(docker) = docker_output {
 			let docker = String::from_utf8_lossy(&docker.stdout);
@@ -68,7 +68,6 @@ impl Opts {
 		}
 
 		Err(Error::UnknownContainerEngine)
-
 	}
 }
 
