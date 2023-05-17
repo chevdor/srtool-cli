@@ -1,4 +1,4 @@
-VERSION := `toml get cli/Cargo.toml package.version | jq -r`
+VERSION := `toml get Cargo.toml workspace.package.version | jq -r`
 
 _default:
 	just --choose --chooser "fzf +s -x --tac --cycle"
@@ -34,6 +34,7 @@ usage:
 tag:
     @echo Tagging v{{VERSION}}
     git tag -f v{{VERSION}}
+    git tag | sort -Vr | head
 
 # Create and push a tag matching the current version
 tag_push: tag
