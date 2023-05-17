@@ -3,16 +3,38 @@ srtool is cli allowing to control the srtool docker image
 Usage: srtool [OPTIONS] <COMMAND>
 
 Commands:
-  pull     Simply pull the srtool image and do not run anything else
-  build    Start a new srtool container to build your runtime
-  info     Provide information about the srtool container and your repo
-  version  Show the versions of the srtool container. Use --version if you want the version of this executable
-  help     Print this message or the help of the given subcommand(s)
+  pull
+          Simply pull the srtool image and do not run anything else
+  build
+          Start a new srtool container to build your runtime
+  info
+          Provide information about the srtool container and your repo
+  version
+          Show the versions of the srtool container. Use --version if you want the version of this executable
+  help
+          Print this message or the help of the given subcommand(s)
 
 Options:
-  -i, --image <IMAGE>    Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool [default: paritytech/srtool]
-  -j, --json             This option is DEPRECATED and has no effect
-  -n, --no-cache         Do not use the local cached tag value
-  -e, --engine <ENGINE>  [default: docker]
-  -h, --help             Print help
-  -V, --version          Print version
+  -i, --image <IMAGE>
+          Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool
+          
+          [default: docker.io/paritytech/srtool]
+
+  -j, --json
+          This option is DEPRECATED and has no effect
+
+  -n, --no-cache
+          Do not use the local cached tag value
+
+  -e, --engine <ENGINE>
+          By default, srtool-cli auto-detects whether you use Podman or Docker. You can force the engine if the detection does not meet your expectation. The default is auto and defaults to Podman.
+          
+          NOTE: Using Podman currently forces using --no-cache
+          
+          [default: auto]
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+  -V, --version
+          Print version
