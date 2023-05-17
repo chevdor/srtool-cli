@@ -3,12 +3,36 @@ Provide information about the srtool container and your repo
 Usage: srtool info [OPTIONS] --package <PACKAGE> [PATH]
 
 Arguments:
-  [PATH]  By default, srtool will work in the current folder. If your project is located in another location, you can pass it here [default: .]
+  [PATH]
+          By default, srtool will work in the current folder. If your project is located in another location, you can pass it here
+          
+          [default: .]
 
 Options:
-  -i, --image <IMAGE>              Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool [default: paritytech/srtool]
-  -p, --package <PACKAGE>          Provide the runtime such as kusama-runtime, polkadot-runtime, etc... [env: PACKAGE=]
-  -r, --runtime-dir <RUNTIME_DIR>  If your runtime is not in the standard location runtime/<chain_name> you can pass this args to help srtool find it [env: RUNTIME_DIR=]
-  -e, --engine <ENGINE>            [default: docker]
-  -h, --help                       Print help
-  -V, --version                    Print version
+  -i, --image <IMAGE>
+          Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool
+          
+          [default: docker.io/paritytech/srtool]
+
+  -p, --package <PACKAGE>
+          Provide the runtime such as kusama-runtime, polkadot-runtime, etc...
+          
+          [env: PACKAGE=]
+
+  -r, --runtime-dir <RUNTIME_DIR>
+          If your runtime is not in the standard location runtime/<chain_name> you can pass this args to help srtool find it
+          
+          [env: RUNTIME_DIR=]
+
+  -e, --engine <ENGINE>
+          By default, srtool-cli auto-detects whether you use Podman or Docker. You can force the engine if the detection does not meet your expectation. The default is auto and defaults to Podman.
+          
+          NOTE: Using Podman currently forces using --no-cache
+          
+          [default: auto]
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+  -V, --version
+          Print version

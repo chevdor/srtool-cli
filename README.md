@@ -38,19 +38,41 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
     Usage: srtool [OPTIONS] <COMMAND>
 
     Commands:
-      pull     Simply pull the srtool image and do not run anything else
-      build    Start a new srtool container to build your runtime
-      info     Provide information about the srtool container and your repo
-      version  Show the versions of the srtool container. Use --version if you want the version of this executable
-      help     Print this message or the help of the given subcommand(s)
+      pull
+              Simply pull the srtool image and do not run anything else
+      build
+              Start a new srtool container to build your runtime
+      info
+              Provide information about the srtool container and your repo
+      version
+              Show the versions of the srtool container. Use --version if you want the version of this executable
+      help
+              Print this message or the help of the given subcommand(s)
 
     Options:
-      -i, --image <IMAGE>    Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool [default: paritytech/srtool]
-      -j, --json             This option is DEPRECATED and has no effect
-      -n, --no-cache         Do not use the local cached tag value
-      -e, --engine <ENGINE>  [default: docker]
-      -h, --help             Print help
-      -V, --version          Print version
+      -i, --image <IMAGE>
+              Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool
+
+              [default: docker.io/paritytech/srtool]
+
+      -j, --json
+              This option is DEPRECATED and has no effect
+
+      -n, --no-cache
+              Do not use the local cached tag value
+
+      -e, --engine <ENGINE>
+              By default, srtool-cli auto-detects whether you use Podman or Docker. You can force the engine if the detection does not meet your expectation. The default is auto and defaults to Podman.
+
+              NOTE: Using Podman currently forces using --no-cache
+
+              [default: auto]
+
+      -h, --help
+              Print help (see a summary with '-h')
+
+      -V, --version
+              Print version
 
 **version**
 
@@ -59,10 +81,23 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
     Usage: srtool version [OPTIONS]
 
     Options:
-      -i, --image <IMAGE>    Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool [default: paritytech/srtool]
-      -e, --engine <ENGINE>  [default: docker]
-      -h, --help             Print help
-      -V, --version          Print version
+      -i, --image <IMAGE>
+              Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool
+
+              [default: docker.io/paritytech/srtool]
+
+      -e, --engine <ENGINE>
+              By default, srtool-cli auto-detects whether you use Podman or Docker. You can force the engine if the detection does not meet your expectation. The default is auto and defaults to Podman.
+
+              NOTE: Using Podman currently forces using --no-cache
+
+              [default: auto]
+
+      -h, --help
+              Print help (see a summary with '-h')
+
+      -V, --version
+              Print version
 
 **info**
 
@@ -71,15 +106,39 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
     Usage: srtool info [OPTIONS] --package <PACKAGE> [PATH]
 
     Arguments:
-      [PATH]  By default, srtool will work in the current folder. If your project is located in another location, you can pass it here [default: .]
+      [PATH]
+              By default, srtool will work in the current folder. If your project is located in another location, you can pass it here
+
+              [default: .]
 
     Options:
-      -i, --image <IMAGE>              Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool [default: paritytech/srtool]
-      -p, --package <PACKAGE>          Provide the runtime such as kusama-runtime, polkadot-runtime, etc... [env: PACKAGE=]
-      -r, --runtime-dir <RUNTIME_DIR>  If your runtime is not in the standard location runtime/<chain_name> you can pass this args to help srtool find it [env: RUNTIME_DIR=]
-      -e, --engine <ENGINE>            [default: docker]
-      -h, --help                       Print help
-      -V, --version                    Print version
+      -i, --image <IMAGE>
+              Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool
+
+              [default: docker.io/paritytech/srtool]
+
+      -p, --package <PACKAGE>
+              Provide the runtime such as kusama-runtime, polkadot-runtime, etc...
+
+              [env: PACKAGE=]
+
+      -r, --runtime-dir <RUNTIME_DIR>
+              If your runtime is not in the standard location runtime/<chain_name> you can pass this args to help srtool find it
+
+              [env: RUNTIME_DIR=]
+
+      -e, --engine <ENGINE>
+              By default, srtool-cli auto-detects whether you use Podman or Docker. You can force the engine if the detection does not meet your expectation. The default is auto and defaults to Podman.
+
+              NOTE: Using Podman currently forces using --no-cache
+
+              [default: auto]
+
+      -h, --help
+              Print help (see a summary with '-h')
+
+      -V, --version
+              Print version
 
 **pull**
 
@@ -88,10 +147,23 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
     Usage: srtool pull [OPTIONS]
 
     Options:
-      -i, --image <IMAGE>    Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool [default: paritytech/srtool]
-      -e, --engine <ENGINE>  [default: docker]
-      -h, --help             Print help
-      -V, --version          Print version
+      -i, --image <IMAGE>
+              Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool
+
+              [default: docker.io/paritytech/srtool]
+
+      -e, --engine <ENGINE>
+              By default, srtool-cli auto-detects whether you use Podman or Docker. You can force the engine if the detection does not meet your expectation. The default is auto and defaults to Podman.
+
+              NOTE: Using Podman currently forces using --no-cache
+
+              [default: auto]
+
+      -h, --help
+              Print help (see a summary with '-h')
+
+      -V, --version
+              Print version
 
 **build**
 
@@ -100,35 +172,68 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
     Usage: srtool build [OPTIONS] --package <PACKAGE> [PATH]
 
     Arguments:
-      [PATH]  By default, srtool will work in the current folder. If your project is located in another location, you can pass it here [default: .]
+      [PATH]
+              By default, srtool will work in the current folder. If your project is located in another location, you can pass it here
+
+              [default: .]
 
     Options:
       -i, --image <IMAGE>
-              Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool [default: paritytech/srtool]
+              Choose an alternative image. Beware to choose an image that is compatible with the original srtool image. Using a random image, you take the risk to NOT produce exactly the same deterministic result as srtool
+
+              [default: docker.io/paritytech/srtool]
+
       -p, --package <PACKAGE>
-              Provide the runtime such as kusama-runtime, polkadot-runtime, etc... [env: PACKAGE=]
+              Provide the runtime such as kusama-runtime, polkadot-runtime, etc...
+
+              [env: PACKAGE=]
+
       -j, --json
               Enable json output, same than the global --json option
+
       -a, --app
               Enable the "app" mode which is a mix of json output and outputting progress during the build. This flag is recommended for CI. the json output will be provided as a single line at the end in compact mode
+
       -e, --engine <ENGINE>
-              [default: docker]
+              By default, srtool-cli auto-detects whether you use Podman or Docker. You can force the engine if the detection does not meet your expectation. The default is auto and defaults to Podman.
+
+              NOTE: Using Podman currently forces using --no-cache
+
+              [default: auto]
+
       -r, --runtime-dir <RUNTIME_DIR>
-              If your runtime is not in the standard location runtime/<chain_name> you can pass this args to help srtool find it [env: RUNTIME_DIR=]
+              If your runtime is not in the standard location runtime/<chain_name> you can pass this args to help srtool find it
+
+              [env: RUNTIME_DIR=]
+
           --build-opts <BUILD_OPTS>
-              You may pass options to cargo directly here. WARNING, if you pass this value, the automatic build options for Kusama and Polkadot will not be passed and you need to take care of them manually. In general, you should never use this option unless you HAVE to [env: BUILD_OPTS=]
+              You may pass options to cargo directly here. WARNING, if you pass this value, the automatic build options for Kusama and Polkadot will not be passed and you need to take care of them manually. In general, you should never use this option unless you HAVE to
+
+              [env: BUILD_OPTS=]
+
           --default-features <DEFAULT_FEATURES>
-              Passing this is less involved than passing BUILD_OPTS. It allows changing the list of default features while keeping the automatic features detection. This value is useless if BUILD_OPTS is set [env: DEFAULT_FEATURES=]
+              Passing this is less involved than passing BUILD_OPTS. It allows changing the list of default features while keeping the automatic features detection. This value is useless if BUILD_OPTS is set
+
+              [env: DEFAULT_FEATURES=]
+
           --profile <PROFILE>
-              The default profile to build runtimes is always `release`. You may override the default with this flag [env: PROFILE=] [default: release]
+              The default profile to build runtimes is always `release`. You may override the default with this flag
+
+              [env: PROFILE=]
+              [default: release]
+
           --no-cache
               Passing this flag allows completely disabling caching. As a result, no cargo-home will be mounted to the srtool image. There is no known issue with having the cache ON, this is why it is the default
+
           --root
-              Run docker image as root, this helps on Linux based systems
+              Run container image as root, this helps on Linux based systems
+
           --verbose
               Run the build script using the verbose option
+
       -h, --help
-              Print help
+              Print help (see a summary with '-h')
+
       -V, --version
               Print version
 
