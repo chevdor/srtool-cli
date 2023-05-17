@@ -1,20 +1,14 @@
 [package]
-authors = ["chevdor <chevdor@gmail.com>"]
 description = "srtool is cli allowing to control the srtool docker image"
-edition = "2021"
 homepage = "https://github.com/chevdor/subwasm"
-keywords = [
-  "wasm",
-  "cli",
-  "runtime",
-  "polkadot",
-  "kusama",
-]
+keywords = ["wasm", "cli", "runtime", "polkadot", "kusama"]
 license = "MIT"
 name = "srtool-cli"
 readme = "../README.md"
 repository = "https://github.com/chevdor/srtool-cli"
-version = "0.11.0"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
 
 [[bin]]
 bench = false

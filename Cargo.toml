@@ -1,6 +1,7 @@
 [workspace]
+members = ["cli", "lib"]
 
-members = [
-    "cli",
-    "lib",
-]
+[workspace.package]
+version = "0.12.0"
+edition = "2021"
+authors = ["chevdor@gmail.com"]
