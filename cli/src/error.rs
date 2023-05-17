@@ -1,32 +1,30 @@
 use std::string::FromUtf8Error;
 
-#[derive(Debug)]
-pub enum Error {
-	UnknownContainerEngine,
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum SrtoolError {
+	#[error("Unknown container engine `{0:?}`")]
+	UnknownContainerEngine(Option<String>),
+
+	#[error("Error setting Ctrl-C handler")]
 	CtrlCSetup,
+
+	#[error("IO error: {0}")]
 	IO(std::io::Error),
+
+	#[error("UTF8 error: {0}")]
 	UTF8(std::string::FromUtf8Error),
 }
 
-impl From<std::io::Error> for Error {
+impl From<std::io::Error> for SrtoolError {
 	fn from(error: std::io::Error) -> Self {
-		Error::IO(error)
+		SrtoolError::IO(error)
 	}
 }
 
-impl From<FromUtf8Error> for Error {
+impl From<FromUtf8Error> for SrtoolError {
 	fn from(error: FromUtf8Error) -> Self {
-		Error::UTF8(error)
-	}
-}
-
-impl From<Error> for String {
-	fn from(error: Error) -> Self {
-		match error {
-			Error::UnknownContainerEngine => "Unknown container engine".to_string(),
-			Error::CtrlCSetup => "Error setting Ctrl-C handler".to_string(),
-			Error::IO(error) => format!("IO error: {error}"),
-			Error::UTF8(error) => format!("UTF8 error: {error}"),
-		}
+		SrtoolError::UTF8(error)
 	}
 }

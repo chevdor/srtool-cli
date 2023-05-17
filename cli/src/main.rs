@@ -8,7 +8,7 @@ use std::process::Command;
 use std::{env, fs};
 
 mod error;
-use error::Error;
+use error::SrtoolError;
 
 mod container_engine;
 use container_engine::ContainerEngine;
@@ -21,13 +21,13 @@ fn handle_exit(engine: ContainerEngine) {
 	std::process::exit(0);
 }
 
-fn main() -> Result<(), Error> {
+fn main() -> Result<(), SrtoolError> {
 	env_logger::init();
 	info!("Running srtool-cli v{}", crate_version!());
 
 	let opts: Opts = Opts::parse();
 	let image = &opts.image;
-	let engine: ContainerEngine = opts.get_container_engine()?;
+	let engine = opts.engine;
 
 	if opts.no_cache {
 		clear_cache();
@@ -36,7 +36,7 @@ fn main() -> Result<(), Error> {
 	ctrlc::set_handler(move || {
 		handle_exit(engine);
 	})
-	.map_err(|_| Error::CtrlCSetup)?;
+	.map_err(|_| SrtoolError::CtrlCSetup)?;
 
 	debug!("Checking what is the latest available tag...");
 	const ONE_HOUR: u64 = 60 * 60;
@@ -61,11 +61,9 @@ fn main() -> Result<(), Error> {
 			let runtime_dir = build_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
 			let tmpdir = env::temp_dir().join("cargo");
 			let digest = get_image_digest(image, &tag).unwrap_or_default();
-			let cache_mount = if !build_opts.no_cache {
-				format!("-v {tmpdir}:/cargo-home", tmpdir = tmpdir.display())
-			} else {
-				String::new()
-			};
+			let no_cache = if opts.engine == ContainerEngine::Podman { true } else { build_opts.no_cache };
+			let cache_mount =
+				if !no_cache { format!("-v {tmpdir}:/cargo-home", tmpdir = tmpdir.display()) } else { String::new() };
 			let root_opts = if build_opts.root { "-u root" } else { "" };
 			let verbose_opts = if build_opts.verbose { "-e VERBOSE=1" } else { "" };
 
@@ -77,7 +75,7 @@ fn main() -> Result<(), Error> {
 			debug!("runtime_dir: '{}'", &runtime_dir.display());
 			debug!("tmpdir: '{}'", &tmpdir.display());
 			debug!("digest: '{digest}'");
-			debug!("no-cache: '{}'", build_opts.no_cache);
+			debug!("no-cache: '{}'", no_cache);
 
 			let path = fs::canonicalize(&build_opts.path).unwrap();
 

@@ -1,8 +1,13 @@
 use clap::{crate_authors, crate_version, Parser, Subcommand};
+use std::convert::TryFrom;
+use std::env;
 use std::path::PathBuf;
-use std::{env, process::Command};
 
-use crate::{ContainerEngine, Error};
+use crate::{error, ContainerEngine};
+
+fn parse_container_engine(s: &str) -> Result<ContainerEngine, error::SrtoolError> {
+	ContainerEngine::try_from(s)
+}
 
 /// Control the srtool docker container
 #[derive(Parser)]
@@ -23,52 +28,17 @@ pub struct Opts {
 	#[clap(short, long)]
 	pub no_cache: bool,
 
-	#[clap(short, long, global = true, default_value = "auto")]
-	pub engine: String,
+	/// By default, srtool-cli auto-detects whether you use Podman or Docker. You can force
+	/// the engine if the detection does not meet your expectation. The default is auto and defaults
+	/// to Podman.
+	///
+	/// NOTE: Using Podman currently forces using --no-cache
+	#[clap(short, long, global = true, default_value = "auto", value_parser = parse_container_engine)]
+	pub engine: ContainerEngine,
 
 	/// Subcommands are commands passed to `srtool`.
 	#[clap(subcommand)]
 	pub subcmd: SubCommand,
-}
-
-impl Opts {
-	pub fn get_container_engine(&self) -> Result<ContainerEngine, Error> {
-		match self.engine.as_str() {
-			"auto" => Self::detect_container_engine(),
-			"podman" => Ok(ContainerEngine::Podman),
-			"docker" => {
-				println!("WARNING: You are using docker. We recommend using podman instead.");
-				Ok(ContainerEngine::Docker)
-			}
-			_ => Err(Error::UnknownContainerEngine),
-		}
-	}
-
-	fn detect_container_engine() -> Result<ContainerEngine, Error> {
-		let podman_output: Option<std::process::Output> = Command::new("podman").arg("--version").output().ok();
-		if let Some(podman) = podman_output {
-			let podman = String::from_utf8_lossy(&podman.stdout);
-			if podman.to_lowercase().contains("podman") {
-				return Ok(ContainerEngine::Podman);
-			} else if podman.contains("docker") {
-				println!("WARNING: You have podman symlinked to docker. This is strange.");
-				return Ok(ContainerEngine::Docker);
-			}
-		}
-
-		let docker_output = Command::new("docker").arg("--version").output().ok();
-		if let Some(docker) = docker_output {
-			let docker = String::from_utf8_lossy(&docker.stdout);
-			if docker.to_lowercase().contains("docker") {
-				println!("WARNING: You are using docker. We recommend using podman instead.");
-				return Ok(ContainerEngine::Docker);
-			} else if docker.contains("podman") {
-				return Ok(ContainerEngine::Podman);
-			}
-		}
-
-		Err(Error::UnknownContainerEngine)
-	}
 }
 
 /// This utility helps starting a container from the srtool Docker image.
