@@ -1,6 +1,13 @@
 use clap::{crate_authors, crate_version, Parser, Subcommand};
+use std::convert::TryFrom;
 use std::env;
 use std::path::PathBuf;
+
+use crate::{error, ContainerEngine};
+
+fn parse_container_engine(s: &str) -> Result<ContainerEngine, error::SrtoolError> {
+	ContainerEngine::try_from(s)
+}
 
 /// Control the srtool docker container
 #[derive(Parser)]
@@ -10,7 +17,7 @@ pub struct Opts {
 	/// compatible with the original srtool image. Using a random image,
 	/// you take the risk to NOT produce exactly the same deterministic
 	/// result as srtool.
-	#[clap(short, long, default_value = "paritytech/srtool", global = true)]
+	#[clap(short, long, default_value = "docker.io/paritytech/srtool", global = true)]
 	pub image: String,
 
 	/// This option is DEPRECATED and has no effect
@@ -21,8 +28,13 @@ pub struct Opts {
 	#[clap(short, long)]
 	pub no_cache: bool,
 
-	#[clap(short, long, default_value = "docker", global = true)]
-	pub engine: String,
+	/// By default, srtool-cli auto-detects whether you use Podman or Docker. You can force
+	/// the engine if the detection does not meet your expectation. The default is auto and defaults
+	/// to Podman.
+	///
+	/// NOTE: Using Podman currently forces using --no-cache
+	#[clap(short, long, global = true, default_value = "auto", value_parser = parse_container_engine)]
+	pub engine: ContainerEngine,
 
 	/// Subcommands are commands passed to `srtool`.
 	#[clap(subcommand)]
@@ -107,7 +119,7 @@ pub struct BuildOpts {
 	#[clap(long)]
 	pub no_cache: bool,
 
-	/// Run docker image as root, this helps on Linux based systems.
+	/// Run container image as root, this helps on Linux based systems.
 	#[clap(long)]
 	pub root: bool,
 

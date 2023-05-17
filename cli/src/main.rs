@@ -7,29 +7,36 @@ use std::path::PathBuf;
 use std::process::Command;
 use std::{env, fs};
 
-fn handle_exit() {
+mod error;
+use error::SrtoolError;
+
+mod container_engine;
+use container_engine::ContainerEngine;
+
+fn handle_exit(engine: &ContainerEngine) {
 	println!("Killing srtool container, your build was not finished...");
-	let cmd = "docker rm -f srtool".to_string();
+	let cmd = format!("{engine} rm -f srtool");
 	let _ = Command::new("sh").arg("-c").arg(cmd).spawn().expect("failed to execute cleaning process").wait();
 	println!("Exiting");
 	std::process::exit(0);
 }
 
-fn main() {
+fn main() -> Result<(), SrtoolError> {
 	env_logger::init();
 	info!("Running srtool-cli v{}", crate_version!());
 
 	let opts: Opts = Opts::parse();
-	let image = opts.image;
+	let image = &opts.image;
+	let engine = opts.engine;
 
 	if opts.no_cache {
 		clear_cache();
 	}
 
 	ctrlc::set_handler(move || {
-		handle_exit();
+		handle_exit(&engine);
 	})
-	.expect("Error setting Ctrl-C handler");
+	.map_err(|_| SrtoolError::CtrlCSetup)?;
 
 	debug!("Checking what is the latest available tag...");
 	const ONE_HOUR: u64 = 60 * 60;
@@ -38,12 +45,10 @@ fn main() {
 
 	info!("Using {image}:{tag}");
 
-	let engine = opts.engine;
-
 	let command = match opts.subcmd {
 		SubCommand::Pull(_) => {
 			println!("Found {tag}, we will be using {image}:{tag} for the build");
-			format!("docker pull {image}:{tag}")
+			format!("{engine} pull {image}:{tag}")
 		}
 
 		SubCommand::Build(build_opts) => {
@@ -55,12 +60,10 @@ fn main() {
 			let default_runtime_dir = format!("runtime/{chain}");
 			let runtime_dir = build_opts.runtime_dir.unwrap_or_else(|| PathBuf::from(&default_runtime_dir));
 			let tmpdir = env::temp_dir().join("cargo");
-			let digest = get_image_digest(&image, &tag).unwrap_or_default();
-			let cache_mount = if !build_opts.no_cache {
-				format!("-v {tmpdir}:/cargo-home", tmpdir = tmpdir.display())
-			} else {
-				String::new()
-			};
+			let digest = get_image_digest(image, &tag).unwrap_or_default();
+			let no_cache = if opts.engine == ContainerEngine::Podman { true } else { build_opts.no_cache };
+			let cache_mount =
+				if !no_cache { format!("-v {tmpdir}:/cargo-home", tmpdir = tmpdir.display()) } else { String::new() };
 			let root_opts = if build_opts.root { "-u root" } else { "" };
 			let verbose_opts = if build_opts.verbose { "-e VERBOSE=1" } else { "" };
 
@@ -72,7 +75,7 @@ fn main() {
 			debug!("runtime_dir: '{}'", &runtime_dir.display());
 			debug!("tmpdir: '{}'", &tmpdir.display());
 			debug!("digest: '{digest}'");
-			debug!("no-cache: '{}'", build_opts.no_cache);
+			debug!("no-cache: '{}'", no_cache);
 
 			let path = fs::canonicalize(&build_opts.path).unwrap();
 
@@ -120,7 +123,7 @@ fn main() {
 		}
 
 		SubCommand::Version(_) => {
-			format!("{engine} run --name srtool --rm {image}:{tag} version", engine = engine, image = image, tag = tag)
+			format!("{engine} run --name srtool --rm {image}:{tag} version")
 		}
 	};
 
@@ -132,6 +135,8 @@ fn main() {
 		let _ =
 			Command::new("sh").arg("-c").arg(command).spawn().expect("failed to execute process").wait_with_output();
 	}
+
+	Ok(())
 }
 
 #[cfg(test)]
