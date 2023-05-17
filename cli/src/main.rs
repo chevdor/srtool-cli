@@ -13,7 +13,7 @@ use error::SrtoolError;
 mod container_engine;
 use container_engine::ContainerEngine;
 
-fn handle_exit(engine: ContainerEngine) {
+fn handle_exit(engine: &ContainerEngine) {
 	println!("Killing srtool container, your build was not finished...");
 	let cmd = format!("{engine} rm -f srtool");
 	let _ = Command::new("sh").arg("-c").arg(cmd).spawn().expect("failed to execute cleaning process").wait();
@@ -34,7 +34,7 @@ fn main() -> Result<(), SrtoolError> {
 	}
 
 	ctrlc::set_handler(move || {
-		handle_exit(engine);
+		handle_exit(&engine);
 	})
 	.map_err(|_| SrtoolError::CtrlCSetup)?;
 
