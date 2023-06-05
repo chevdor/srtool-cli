@@ -21,6 +21,11 @@ jobs:
         rust: ["stable", "nightly"]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Setup docker (missing on MacOS)
+        if: runner.os == 'macos'
+        run: |
+          brew install docker
+
       - name: Check docker install
         run: docker --version
 
