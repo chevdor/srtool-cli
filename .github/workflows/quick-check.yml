@@ -7,6 +7,11 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+# We use Docker for now due to:
+# https://github.com/actions/runner/issues/505
+env:
+  ENGINE: docker
+
 jobs:
   quick_check:
     runs-on: ubuntu-latest

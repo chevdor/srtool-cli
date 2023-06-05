@@ -33,7 +33,7 @@ pub struct Opts {
 	/// to Podman.
 	///
 	/// NOTE: Using Podman currently forces using --no-cache
-	#[clap(short, long, global = true, default_value = "auto", value_parser = parse_container_engine)]
+	#[clap(short, long, global = true, default_value = "auto", value_parser = parse_container_engine, env)]
 	pub engine: ContainerEngine,
 
 	/// Subcommands are commands passed to `srtool`.

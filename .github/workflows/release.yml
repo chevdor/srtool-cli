@@ -7,6 +7,11 @@ on:
     tags:
       - "v*"
 
+# We use Docker for now due to:
+# https://github.com/actions/runner/issues/505
+env:
+  ENGINE: docker
+
 jobs:
   linux:
     env:

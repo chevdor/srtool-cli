@@ -41,7 +41,7 @@ impl TryFrom<&str> for ContainerEngine {
 	type Error = SrtoolError;
 
 	fn try_from(s: &str) -> Result<Self, Self::Error> {
-		match s {
+		match s.to_ascii_lowercase().as_str() {
 			"auto" => Self::detect(),
 			"podman" => Ok(ContainerEngine::Podman),
 			"docker" => {
