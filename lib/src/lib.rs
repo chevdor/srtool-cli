@@ -1,3 +1,6 @@
+mod error;
+
+use error::*;
 use log::{debug, info};
 use std::{
 	env,
@@ -11,7 +14,7 @@ const CACHE_FILE: &str = "srtool-tag-latest.txt";
 
 /// Fetch the latest image tag
 #[allow(clippy::result_large_err)]
-pub fn fetch_image_tag() -> Result<String, ureq::Error> {
+pub fn fetch_image_tag() -> Result<String> {
 	debug!("Fetching latest version from github");
 	let url = "https://raw.githubusercontent.com/paritytech/srtool/master/RUSTC_VERSION";
 	let tag: String = ureq::get(url).set("Content-Type", "application/txt").call()?.into_string()?.trim().to_string();
@@ -21,7 +24,7 @@ pub fn fetch_image_tag() -> Result<String, ureq::Error> {
 
 /// Get the latest image. it is fetched from cache we have a version that is younger than `cache_validity` in seconds.
 #[allow(clippy::result_large_err)]
-pub fn get_image_tag(cache_validity: Option<u64>) -> Result<String, ureq::Error> {
+pub fn get_image_tag(cache_validity: Option<u64>) -> Result<String> {
 	let env_tag = env::var("SRTOOL_TAG");
 	if let Ok(tag) = env_tag {
 		info!("using tag from ENV: {:?}", tag);
@@ -67,10 +70,10 @@ pub fn get_image_tag(cache_validity: Option<u64>) -> Result<String, ureq::Error>
 	}
 }
 
-pub fn clear_cache() {
+pub fn clear_cache() -> Result<()> {
 	let cache_location = std::env::temp_dir().join(CACHE_FILE);
 	debug!("Deleting cache from {}", cache_location.display());
-	let _ = fs::remove_file(cache_location);
+	fs::remove_file(cache_location).map_err(SrtoolLibError::IO)
 }
 
 // docker inspect paritytech/srtool:1.53.0 | jq -r '.[0].RepoDigests[0]'

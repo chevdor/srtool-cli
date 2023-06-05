@@ -30,7 +30,7 @@ fn main() -> Result<(), SrtoolError> {
 	let engine = opts.engine;
 
 	if opts.no_cache {
-		clear_cache();
+		let _ = clear_cache();
 	}
 
 	ctrlc::set_handler(move || {

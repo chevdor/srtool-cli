@@ -23,7 +23,7 @@ mod cli_tests {
 		use assert_cmd::Command;
 
 		#[test]
-		fn it_lints_good_file() {
+		fn it_calls_version() {
 			let mut cmd = Command::cargo_bin(CLI).unwrap();
 			let assert = cmd.arg("version").assert();
 			assert.success().code(0);
@@ -36,7 +36,7 @@ mod cli_tests {
 		use assert_cmd::Command;
 
 		#[test]
-		fn it_calls_list() {
+		fn it_calls_pull() {
 			let mut cmd = Command::cargo_bin(CLI).unwrap();
 			let assert = cmd.arg("pull").assert();
 			assert.success().code(0);

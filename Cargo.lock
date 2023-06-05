@@ -567,6 +567,7 @@ version = "0.12.0"
 dependencies = [
  "log",
  "serde_json",
+ "thiserror",
  "ureq",
 ]
 
