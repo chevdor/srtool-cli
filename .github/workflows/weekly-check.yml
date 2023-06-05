@@ -17,9 +17,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
         rust: ["stable", "nightly"]
-    runs-on: ${{ matrix.os }}
+
+    # We can only run on Linux, there is no Docker available in runners for other OSes
+    runs-on: ubuntu-latest
     steps:
       - name: Install Rust stable toolchain
         uses: actions-rs/toolchain@v1
