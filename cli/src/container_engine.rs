@@ -11,6 +11,10 @@ pub enum ContainerEngine {
 impl ContainerEngine {
 	/// Check whether you have Podman and/or Docker installed. The default will be Podman if both are present.
 	fn detect() -> Result<ContainerEngine, SrtoolError> {
+		if let Ok(engine) = std::env::var("ENGINE") {
+			return ContainerEngine::try_from(engine.as_str());
+		}
+
 		let podman_output: Option<std::process::Output> = Command::new("podman").arg("--version").output().ok();
 		if let Some(podman) = podman_output {
 			let podman = String::from_utf8_lossy(&podman.stdout);
