@@ -21,6 +21,9 @@ jobs:
         rust: ["stable", "nightly"]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Check docker install
+        run: docker --version
+
       - name: Install Rust stable toolchain
         uses: actions-rs/toolchain@v1
         with:

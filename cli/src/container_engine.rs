@@ -49,7 +49,7 @@ impl TryFrom<&str> for ContainerEngine {
 			"auto" => Self::detect(),
 			"podman" => Ok(ContainerEngine::Podman),
 			"docker" => {
-				eprintln!("WARNING: You are using docker. We recommend using podman instead.");
+				println!("WARNING: You are using docker. We recommend using podman instead.");
 				Ok(ContainerEngine::Docker)
 			}
 			_ => Err(SrtoolError::UnknownContainerEngine(Some(s.into()))),
