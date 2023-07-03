@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Docker fix
         if: runner.os != 'Linux'
-        run: ln -s ~/.docker/run/docker.sock /var/run/docker.sock
+        run: sudo ln -s ~/.docker/run/docker.sock /var/run/docker.sock
 
       - name: Install Rust stable toolchain
         uses: actions-rs/toolchain@v1
