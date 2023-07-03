@@ -1,5 +1,3 @@
-# This workflow runs on every push and checks whether everything looks good
-
 name: Weekly Check
 
 on:
