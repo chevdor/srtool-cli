@@ -25,6 +25,7 @@ jobs:
           brew install docker
 
       - name: Docker fix
+        if: runner.os != 'Linux'
         run: ln -s ~/.docker/run/docker.sock /var/run/docker.sock
 
       - name: Check docker install

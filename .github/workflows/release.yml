@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Docker fix
+        if: runner.os != 'Linux'
         run: ln -s ~/.docker/run/docker.sock /var/run/docker.sock
 
       - uses: actions/checkout@v3
