@@ -126,6 +126,11 @@ pub struct BuildOpts {
 	/// Run the build script using the verbose option
 	#[clap(long)]
 	pub verbose: bool,
+
+	/// Passing this flag solves the issue when there are no standard library sources found in WASM
+	/// runtime compilation.
+	#[clap(long)]
+	pub no_wasm_std: bool,
 }
 
 /// Info opts
