@@ -66,6 +66,7 @@ fn main() -> Result<(), SrtoolError> {
 				if !no_cache { format!("-v {tmpdir}:/cargo-home", tmpdir = tmpdir.display()) } else { String::new() };
 			let root_opts = if build_opts.root { "-u root" } else { "" };
 			let verbose_opts = if build_opts.verbose { "-e VERBOSE=1" } else { "" };
+			let no_wasm_std = if build_opts.no_wasm_std { "-e WASM_BUILD_STD=0" } else { "" };
 
 			debug!("engine: '{engine}'");
 			debug!("app: '{app}'");
@@ -76,6 +77,7 @@ fn main() -> Result<(), SrtoolError> {
 			debug!("tmpdir: '{}'", &tmpdir.display());
 			debug!("digest: '{digest}'");
 			debug!("no-cache: '{}'", no_cache);
+			debug!("no-wasm-std: '{no_wasm_std}'");
 
 			let path = fs::canonicalize(&build_opts.path).unwrap();
 
@@ -95,6 +97,7 @@ fn main() -> Result<(), SrtoolError> {
 				-e PROFILE={profile} \
 				-e IMAGE={digest} \
 				{verbose_opts} \
+				{no_wasm_std} \
 				-v {dir}:/build \
 				{cache_mount} \
 				{root_opts} \
