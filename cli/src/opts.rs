@@ -20,6 +20,9 @@ pub struct Opts {
 	#[clap(short, long, default_value = "docker.io/paritytech/srtool", global = true)]
 	pub image: String,
 
+	#[clap(long, global = true)]
+	pub tag: Option<String>,
+
 	/// This option is DEPRECATED and has no effect
 	#[clap(short, long)]
 	pub json: bool,
@@ -131,6 +134,9 @@ pub struct BuildOpts {
 	/// runtime compilation.
 	#[clap(long)]
 	pub no_wasm_std: bool,
+
+	#[clap(long)]
+	pub use_local_registry: bool,
 }
 
 /// Info opts

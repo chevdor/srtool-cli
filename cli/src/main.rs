@@ -3,7 +3,7 @@ use clap::{crate_version, Parser};
 use log::{debug, info};
 use opts::*;
 use srtool_lib::*;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::{env, fs};
 
@@ -41,7 +41,14 @@ fn main() -> Result<(), SrtoolError> {
 	debug!("Checking what is the latest available tag...");
 	const ONE_HOUR: u64 = 60 * 60;
 
-	let tag = get_image_tag(Some(ONE_HOUR)).expect("Issue getting the image tag");
+	let tag = if let Some(tag) = opts.tag {
+		tag
+	} else if let Ok(tag) = env::var("SRTOOL_TAG") {
+		info!("using tag from ENV: {:?}", tag);
+		tag
+	} else {
+		get_image_tag(Some(ONE_HOUR)).expect("Issue getting the image tag")
+	};
 
 	info!("Using {image}:{tag}");
 
@@ -64,9 +71,23 @@ fn main() -> Result<(), SrtoolError> {
 			let no_cache = if opts.engine == ContainerEngine::Podman { true } else { build_opts.no_cache };
 			let cache_mount =
 				if !no_cache { format!("-v {tmpdir}:/cargo-home", tmpdir = tmpdir.display()) } else { String::new() };
-			let root_opts = if build_opts.root { "-u root" } else { "" };
+
+			let root_opts = if build_opts.root { "-u root" } else { "-u builder" };
 			let verbose_opts = if build_opts.verbose { "-e VERBOSE=1" } else { "" };
 			let no_wasm_std = if build_opts.no_wasm_std { "-e WASM_BUILD_STD=0" } else { "" };
+
+			let local_registry = if build_opts.use_local_registry {
+				let user = if build_opts.root { "root" } else { "builder" };
+				let cargo_home = std::env::var("CARGO_HOME")?;
+				let cargo_home = Path::new(&cargo_home).canonicalize()?;
+				let cargo_home = cargo_home.display();
+				format!(
+					"-v {cargo_home}/git:/home/{user}/.cargo/git \
+					-v {cargo_home}/registry:/home/{user}/.cargo/registry"
+				)
+			} else {
+				"".to_string()
+			};
 
 			debug!("engine: '{engine}'");
 			debug!("app: '{app}'");
@@ -99,6 +120,7 @@ fn main() -> Result<(), SrtoolError> {
 				{verbose_opts} \
 				{no_wasm_std} \
 				-v {dir}:/build \
+				{local_registry} \
 				{cache_mount} \
 				{root_opts} \
 				{image}:{tag} build{app}{json}"

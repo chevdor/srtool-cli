@@ -15,6 +15,9 @@ pub enum SrtoolError {
 
 	#[error("UTF8 error: {0}")]
 	UTF8(std::string::FromUtf8Error),
+
+	#[error("EnvVar error: {0}")]
+	Var(#[from] std::env::VarError),
 }
 
 impl From<std::io::Error> for SrtoolError {
