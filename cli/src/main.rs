@@ -82,9 +82,8 @@ fn main() -> Result<(), SrtoolError> {
 				let cargo_home = Path::new(&cargo_home).canonicalize()?;
 				let cargo_home = cargo_home.display();
 				format!(
-					"{} {}",
-					format!("-v {cargo_home}/git:/home/{user}/.cargo/git"),
-					format!("-v {cargo_home}/registry:/home/{user}/.cargo/registry"),
+					"-v {cargo_home}/git:/home/{user}/.cargo/git \
+					-v {cargo_home}/registry:/home/{user}/.cargo/registry"
 				)
 			} else {
 				"".to_string()

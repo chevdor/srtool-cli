@@ -3,7 +3,6 @@ mod error;
 use error::*;
 use log::{debug, info};
 use std::{
-	env,
 	fs::{self, File},
 	io::Write,
 	process::Command,
