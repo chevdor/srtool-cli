@@ -25,12 +25,6 @@ pub fn fetch_image_tag() -> Result<String> {
 /// Get the latest image. it is fetched from cache we have a version that is younger than `cache_validity` in seconds.
 #[allow(clippy::result_large_err)]
 pub fn get_image_tag(cache_validity: Option<u64>) -> Result<String> {
-	let env_tag = env::var("SRTOOL_TAG");
-	if let Ok(tag) = env_tag {
-		info!("using tag from ENV: {:?}", tag);
-		return Ok(tag);
-	}
-
 	let cache_location = std::env::temp_dir().join(CACHE_FILE);
 	debug!("cache_location = {:?}", cache_location);
 
