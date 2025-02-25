@@ -1,6 +1,6 @@
 use std::{fmt::Display, process::Command};
 
-use crate::SrtoolError;
+use crate::SrtoolLibError;
 
 #[derive(Clone, Copy, PartialEq)]
 pub enum ContainerEngine {
@@ -10,7 +10,7 @@ pub enum ContainerEngine {
 
 impl ContainerEngine {
 	/// Check whether you have Podman and/or Docker installed. The default will be Podman if both are present.
-	fn detect() -> Result<ContainerEngine, SrtoolError> {
+	fn detect() -> Result<ContainerEngine, SrtoolLibError> {
 		if let Ok(engine) = std::env::var("ENGINE") {
 			return ContainerEngine::try_from(engine.as_str());
 		}
@@ -37,12 +37,12 @@ impl ContainerEngine {
 			}
 		}
 
-		Err(SrtoolError::UnknownContainerEngine(None))
+		Err(SrtoolLibError::UnknownContainerEngine(None))
 	}
 }
 
 impl TryFrom<&str> for ContainerEngine {
-	type Error = SrtoolError;
+	type Error = SrtoolLibError;
 
 	fn try_from(s: &str) -> Result<Self, Self::Error> {
 		match s.to_ascii_lowercase().as_str() {
@@ -52,7 +52,7 @@ impl TryFrom<&str> for ContainerEngine {
 				println!("WARNING: You are using docker. We recommend using podman instead.");
 				Ok(ContainerEngine::Docker)
 			}
-			_ => Err(SrtoolError::UnknownContainerEngine(Some(s.into()))),
+			_ => Err(SrtoolLibError::UnknownContainerEngine(Some(s.into()))),
 		}
 	}
 }

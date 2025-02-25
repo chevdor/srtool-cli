@@ -1,6 +1,9 @@
+mod container_engine;
 mod error;
 
-use error::*;
+pub use container_engine::ContainerEngine;
+pub use error::*;
+
 use log::{debug, info};
 use std::{
 	env,
