@@ -2,15 +2,18 @@ use std::{fmt::Display, process::Command};
 
 use crate::SrtoolLibError;
 
+/// Represents the container engine being used.
 #[derive(Clone, Copy, PartialEq)]
 pub enum ContainerEngine {
+	/// Represents the Docker container engine.
 	Docker,
+	/// Represents the Podman container engine.
 	Podman,
 }
 
 impl ContainerEngine {
 	/// Check whether you have Podman and/or Docker installed. The default will be Podman if both are present.
-	fn detect() -> Result<ContainerEngine, SrtoolLibError> {
+	pub fn detect() -> Result<ContainerEngine, SrtoolLibError> {
 		if let Ok(engine) = std::env::var("ENGINE") {
 			return ContainerEngine::try_from(engine.as_str());
 		}
