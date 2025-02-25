@@ -63,3 +63,36 @@ impl Display for ContainerEngine {
 		}
 	}
 }
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+	use std::env;
+
+	#[test]
+	fn detect_works() {
+		env::set_var("ENGINE", "docker");
+		assert!(ContainerEngine::detect().unwrap() == ContainerEngine::Docker);
+
+		env::set_var("ENGINE", "podman");
+		assert!(ContainerEngine::detect().unwrap() == ContainerEngine::Podman);
+		// Cleanup after test
+		env::remove_var("ENGINE");
+	}
+
+	#[test]
+	fn container_enginer_try_from_works() {
+		assert!(ContainerEngine::try_from("docker").unwrap() == ContainerEngine::Docker);
+		assert!(ContainerEngine::try_from("podman").unwrap() == ContainerEngine::Podman);
+		assert!(matches!(
+			ContainerEngine::try_from("invalid"),
+			Err(SrtoolLibError::UnknownContainerEngine(Some(_)))
+		));
+	}
+
+	#[test]
+	fn container_enginer_display_works() {
+		assert_eq!(ContainerEngine::Docker.to_string(), "docker");
+		assert_eq!(ContainerEngine::Podman.to_string(), "podman");
+	}
+}
