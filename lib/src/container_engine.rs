@@ -1,16 +1,19 @@
 use std::{fmt::Display, process::Command};
 
-use crate::SrtoolError;
+use crate::SrtoolLibError;
 
+/// Represents the container engine being used.
 #[derive(Clone, Copy, PartialEq)]
 pub enum ContainerEngine {
+	/// Represents the Docker container engine.
 	Docker,
+	/// Represents the Podman container engine.
 	Podman,
 }
 
 impl ContainerEngine {
 	/// Check whether you have Podman and/or Docker installed. The default will be Podman if both are present.
-	fn detect() -> Result<ContainerEngine, SrtoolError> {
+	pub fn detect() -> Result<ContainerEngine, SrtoolLibError> {
 		if let Ok(engine) = std::env::var("ENGINE") {
 			return ContainerEngine::try_from(engine.as_str());
 		}
@@ -21,7 +24,6 @@ impl ContainerEngine {
 			if podman.to_lowercase().contains("podman") {
 				return Ok(ContainerEngine::Podman);
 			} else if podman.contains("docker") {
-				println!("WARNING: You have podman symlinked to docker. This is strange :)");
 				return Ok(ContainerEngine::Docker);
 			}
 		}
@@ -30,19 +32,18 @@ impl ContainerEngine {
 		if let Some(docker) = docker_output {
 			let docker = String::from_utf8_lossy(&docker.stdout);
 			if docker.to_lowercase().contains("docker") {
-				println!("WARNING: You are using docker. We recommend using podman instead.");
 				return Ok(ContainerEngine::Docker);
 			} else if docker.contains("podman") {
 				return Ok(ContainerEngine::Podman);
 			}
 		}
 
-		Err(SrtoolError::UnknownContainerEngine(None))
+		Err(SrtoolLibError::UnknownContainerEngine(None))
 	}
 }
 
 impl TryFrom<&str> for ContainerEngine {
-	type Error = SrtoolError;
+	type Error = SrtoolLibError;
 
 	fn try_from(s: &str) -> Result<Self, Self::Error> {
 		match s.to_ascii_lowercase().as_str() {
@@ -52,7 +53,7 @@ impl TryFrom<&str> for ContainerEngine {
 				println!("WARNING: You are using docker. We recommend using podman instead.");
 				Ok(ContainerEngine::Docker)
 			}
-			_ => Err(SrtoolError::UnknownContainerEngine(Some(s.into()))),
+			_ => Err(SrtoolLibError::UnknownContainerEngine(Some(s.into()))),
 		}
 	}
 }
@@ -63,5 +64,35 @@ impl Display for ContainerEngine {
 			ContainerEngine::Docker => write!(f, "docker"),
 			ContainerEngine::Podman => write!(f, "podman"),
 		}
+	}
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+	use std::env;
+
+	#[test]
+	fn detect_works() {
+		env::set_var("ENGINE", "docker");
+		assert!(ContainerEngine::detect().unwrap() == ContainerEngine::Docker);
+
+		env::set_var("ENGINE", "podman");
+		assert!(ContainerEngine::detect().unwrap() == ContainerEngine::Podman);
+		// Cleanup after test
+		env::remove_var("ENGINE");
+	}
+
+	#[test]
+	fn container_enginer_try_from_works() {
+		assert!(ContainerEngine::try_from("docker").unwrap() == ContainerEngine::Docker);
+		assert!(ContainerEngine::try_from("podman").unwrap() == ContainerEngine::Podman);
+		assert!(matches!(ContainerEngine::try_from("invalid"), Err(SrtoolLibError::UnknownContainerEngine(Some(_)))));
+	}
+
+	#[test]
+	fn container_enginer_display_works() {
+		assert_eq!(ContainerEngine::Docker.to_string(), "docker");
+		assert_eq!(ContainerEngine::Podman.to_string(), "podman");
 	}
 }

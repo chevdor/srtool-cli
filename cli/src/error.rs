@@ -1,5 +1,6 @@
 use std::string::FromUtf8Error;
 
+use srtool_lib::SrtoolLibError;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -26,5 +27,17 @@ impl From<std::io::Error> for SrtoolError {
 impl From<FromUtf8Error> for SrtoolError {
 	fn from(error: FromUtf8Error) -> Self {
 		SrtoolError::UTF8(error)
+	}
+}
+
+impl From<SrtoolLibError> for SrtoolError {
+	fn from(error: SrtoolLibError) -> Self {
+		match error {
+			SrtoolLibError::UnknownContainerEngine(opt) => SrtoolError::UnknownContainerEngine(opt),
+			SrtoolLibError::CtrlCSetup => SrtoolError::CtrlCSetup,
+			SrtoolLibError::IO(e) => SrtoolError::IO(e),
+			SrtoolLibError::UTF8(e) => SrtoolError::UTF8(e),
+			_ => unreachable!("Skipping SrtoolLibError::HttpRequest as it's not relevant"),
+		}
 	}
 }

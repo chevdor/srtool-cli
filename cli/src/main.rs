@@ -2,16 +2,13 @@ mod opts;
 use clap::{crate_version, Parser};
 use log::{debug, info};
 use opts::*;
-use srtool_lib::*;
+use srtool_lib::{clear_cache, get_image_digest, get_image_tag, ContainerEngine};
 use std::path::PathBuf;
 use std::process::Command;
 use std::{env, fs};
 
 mod error;
 use error::SrtoolError;
-
-mod container_engine;
-use container_engine::ContainerEngine;
 
 fn handle_exit(engine: &ContainerEngine) {
 	println!("Killing srtool container, your build was not finished...");
@@ -28,6 +25,9 @@ fn main() -> Result<(), SrtoolError> {
 	let opts: Opts = Opts::parse();
 	let image = &opts.image;
 	let engine = opts.engine;
+	if engine == ContainerEngine::Docker {
+		println!("WARNING: You are using docker. We recommend using podman instead.");
+	}
 
 	if opts.no_cache {
 		let _ = clear_cache();

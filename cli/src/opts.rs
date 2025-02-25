@@ -1,12 +1,13 @@
 use clap::{crate_authors, crate_version, Parser, Subcommand};
+use srtool_lib::ContainerEngine;
 use std::convert::TryFrom;
 use std::env;
 use std::path::PathBuf;
 
-use crate::{error, ContainerEngine};
+use crate::error;
 
 fn parse_container_engine(s: &str) -> Result<ContainerEngine, error::SrtoolError> {
-	ContainerEngine::try_from(s)
+	ContainerEngine::try_from(s).map_err(Into::into)
 }
 
 /// Control the srtool docker container
