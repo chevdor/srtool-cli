@@ -87,10 +87,7 @@ mod tests {
 	fn container_enginer_try_from_works() {
 		assert!(ContainerEngine::try_from("docker").unwrap() == ContainerEngine::Docker);
 		assert!(ContainerEngine::try_from("podman").unwrap() == ContainerEngine::Podman);
-		assert!(matches!(
-			ContainerEngine::try_from("invalid"),
-			Err(SrtoolLibError::UnknownContainerEngine(Some(_)))
-		));
+		assert!(matches!(ContainerEngine::try_from("invalid"), Err(SrtoolLibError::UnknownContainerEngine(Some(_)))));
 	}
 
 	#[test]
