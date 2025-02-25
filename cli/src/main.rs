@@ -25,6 +25,9 @@ fn main() -> Result<(), SrtoolError> {
 	let opts: Opts = Opts::parse();
 	let image = &opts.image;
 	let engine = opts.engine;
+	if engine == ContainerEngine::Docker {
+		println!("WARNING: You are using docker. We recommend using podman instead.");
+	}
 
 	if opts.no_cache {
 		let _ = clear_cache();
