@@ -148,7 +148,7 @@ jobs:
         run: |
           echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
           echo "SHORT_SHA=${GITHUB_SHA::8}" >> $GITHUB_ENV
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
 
       - name: Install tera v0.1.3
         run: |
@@ -197,7 +197,7 @@ jobs:
           echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
           echo "SHORT_SHA=${GITHUB_SHA::8}" >> $GITHUB_ENV
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
 
       - name: Upload Debian package
         uses: actions/upload-release-asset@v1
