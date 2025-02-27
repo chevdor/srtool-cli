@@ -30,7 +30,7 @@ Options:
           
           NOTE: Using Podman currently forces using --no-cache
           
-          [env: ENGINE=docker]
+          [env: ENGINE=]
           [default: auto]
 
   -r, --runtime-dir <RUNTIME_DIR>

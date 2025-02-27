@@ -61,7 +61,7 @@ help
 
               NOTE: Using Podman currently forces using --no-cache
 
-              [env: ENGINE=docker]
+              [env: ENGINE=]
               [default: auto]
 
       -h, --help
@@ -87,7 +87,7 @@ version
 
               NOTE: Using Podman currently forces using --no-cache
 
-              [env: ENGINE=docker]
+              [env: ENGINE=]
               [default: auto]
 
       -h, --help
@@ -129,7 +129,7 @@ info
 
               NOTE: Using Podman currently forces using --no-cache
 
-              [env: ENGINE=docker]
+              [env: ENGINE=]
               [default: auto]
 
       -h, --help
@@ -155,7 +155,7 @@ pull
 
               NOTE: Using Podman currently forces using --no-cache
 
-              [env: ENGINE=docker]
+              [env: ENGINE=]
               [default: auto]
 
       -h, --help
@@ -198,7 +198,7 @@ build
 
               NOTE: Using Podman currently forces using --no-cache
 
-              [env: ENGINE=docker]
+              [env: ENGINE=]
               [default: auto]
 
       -r, --runtime-dir <RUNTIME_DIR>

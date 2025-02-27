@@ -7,8 +7,10 @@ You can find the changelogs below.
 Download the binary for your OS from below:
 - **Linux**
     - [Debian package]({{ DEBIAN_URL }})
-- **MacOS**
-    - [Archive]({{ MACOS_TGZ_URL }})
+- **MacOS Intel**
+    - [Archive]({{ MACOS_INTEL_TGZ_URL }})
+- **MacOS Arm64**
+    - [Archive]({{ MACOS_ARM64_TGZ_URL }})
 # Install
 
 ## From source
