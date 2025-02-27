@@ -95,10 +95,10 @@ jobs:
           echo SHA256: $SHA256
           echo "SHA256=$SHA256" >> $GITHUB_ENV
 
-      - name: Upload MacOS artifacts
+      - name: Upload MacOS Intel artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: macos
+          name: macos-intel
           path: |
             ${{ env.TARGET_DIR }}/srtool
             ${{ env.TARGET_DIR }}/srtool_macos_intel.tar.gz
@@ -178,10 +178,10 @@ jobs:
           echo SHA256: $SHA256
           echo "SHA256=$SHA256" >> $GITHUB_ENV
 
-      - name: Upload MacOS artifacts
+      - name: Upload MacOS ARM64 artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: macos
+          name: macos-arm64
           path: |
             ${{ env.TARGET_DIR }}/srtool
             ${{ env.TARGET_DIR }}/srtool_macos_arm64.tar.gz
@@ -300,12 +300,22 @@ jobs:
           asset_name: "srtool_linux_amd64_${{ env.RELEASE_VERSION }}.deb"
           asset_content_type: application/vnd.debian.binary-package
 
-      - name: Upload MacOS archive
+      - name: Upload MacOS Intel archive
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create_draft.outputs.asset_upload_url }}
-          asset_path: "macos/srtool_macos_intel.tar.gz"
+          asset_path: "macos-intel/srtool_macos_intel.tar.gz"
           asset_name: "srtool_macos_intel_${{ env.RELEASE_VERSION }}.tar.gz"
+          asset_content_type: application/gzip
+
+      - name: Upload MacOS ARM64 archive
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_draft.outputs.asset_upload_url }}
+          asset_path: "macos-arm64/srtool_macos_arm64.tar.gz"
+          asset_name: "srtool_macos_arm64_${{ env.RELEASE_VERSION }}.tar.gz"
           asset_content_type: application/gzip
