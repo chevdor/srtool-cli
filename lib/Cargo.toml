@@ -9,7 +9,7 @@ description = "Lib for srtool-cli"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-log = "0.4"
-serde_json = "1.0"
-ureq = "2.5"
-thiserror = "1.0"
+log = "0.4.26"
+serde_json = "1.0.139"
+ureq = "3.0.7"
+thiserror = "2.0.11"
