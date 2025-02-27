@@ -21,7 +21,7 @@ pub fn fetch_image_tag() -> Result<String> {
 	debug!("Fetching latest version from github");
 	let url = "https://raw.githubusercontent.com/paritytech/srtool/master/RUSTC_VERSION";
 
-	let tag = ureq::get(url).call()?.body_mut().read_to_string()?;
+	let tag = ureq::get(url).call()?.body_mut().read_to_string()?.trim().to_string();
 	debug!("tag: {}", tag);
 	Ok(tag)
 }
