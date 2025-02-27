@@ -31,23 +31,18 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
 ## Usage
 
-**help**
+help
 
     srtool is cli allowing to control the srtool docker image
 
     Usage: srtool [OPTIONS] <COMMAND>
 
     Commands:
-      pull
-              Simply pull the srtool image and do not run anything else
-      build
-              Start a new srtool container to build your runtime
-      info
-              Provide information about the srtool container and your repo
-      version
-              Show the versions of the srtool container. Use --version if you want the version of this executable
-      help
-              Print this message or the help of the given subcommand(s)
+      pull     Simply pull the srtool image and do not run anything else
+      build    Start a new srtool container to build your runtime
+      info     Provide information about the srtool container and your repo
+      version  Show the versions of the srtool container. Use --version if you want the version of this executable
+      help     Print this message or the help of the given subcommand(s)
 
     Options:
       -i, --image <IMAGE>
@@ -66,6 +61,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
               NOTE: Using Podman currently forces using --no-cache
 
+              [env: ENGINE=docker]
               [default: auto]
 
       -h, --help
@@ -74,7 +70,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
       -V, --version
               Print version
 
-**version**
+version
 
     Show the versions of the srtool container. Use --version if you want the version of this executable
 
@@ -91,6 +87,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
               NOTE: Using Podman currently forces using --no-cache
 
+              [env: ENGINE=docker]
               [default: auto]
 
       -h, --help
@@ -99,7 +96,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
       -V, --version
               Print version
 
-**info**
+info
 
     Provide information about the srtool container and your repo
 
@@ -132,6 +129,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
               NOTE: Using Podman currently forces using --no-cache
 
+              [env: ENGINE=docker]
               [default: auto]
 
       -h, --help
@@ -140,7 +138,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
       -V, --version
               Print version
 
-**pull**
+pull
 
     Simply pull the srtool image and do not run anything else
 
@@ -157,6 +155,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
               NOTE: Using Podman currently forces using --no-cache
 
+              [env: ENGINE=docker]
               [default: auto]
 
       -h, --help
@@ -165,7 +164,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
       -V, --version
               Print version
 
-**build**
+build
 
     Start a new srtool container to build your runtime
 
@@ -199,6 +198,7 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
               NOTE: Using Podman currently forces using --no-cache
 
+              [env: ENGINE=docker]
               [default: auto]
 
       -r, --runtime-dir <RUNTIME_DIR>
@@ -230,6 +230,9 @@ This alias is likely set in your `.bash_profile` or `.zshrc`, make sure to remov
 
           --verbose
               Run the build script using the verbose option
+
+          --no-wasm-std
+              Passing this flag solves the issue when there are no standard library sources found in WASM runtime compilation
 
       -h, --help
               Print help (see a summary with '-h')

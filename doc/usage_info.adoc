@@ -29,6 +29,7 @@ Options:
           
           NOTE: Using Podman currently forces using --no-cache
           
+          [env: ENGINE=docker]
           [default: auto]
 
   -h, --help

@@ -30,6 +30,7 @@ Options:
           
           NOTE: Using Podman currently forces using --no-cache
           
+          [env: ENGINE=docker]
           [default: auto]
 
   -r, --runtime-dir <RUNTIME_DIR>
@@ -61,6 +62,9 @@ Options:
 
       --verbose
           Run the build script using the verbose option
+
+      --no-wasm-std
+          Passing this flag solves the issue when there are no standard library sources found in WASM runtime compilation
 
   -h, --help
           Print help (see a summary with '-h')
